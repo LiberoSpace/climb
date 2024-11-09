@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "738509308633",
+    "project_id": "climb-town-5981f",
+    "storage_bucket": "climb-town-5981f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738509308633:android:07a41834101e4f610674c8",
+        "android_client_info": {
+          "package_name": "com.LiberoSpace.climb.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "738509308633-c72etek07a35gvottgsiagkieaou08f2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.LiberoSpace.climb.dev",
+            "certificate_hash": "29bdb442632bfd8e599aaccc043d009c69154b9f"
+          }
+        },
+        {
+          "client_id": "738509308633-uth1ggpiso793siio12tla59gi3ha97i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAeSHBbW6s7adn6VTSA8LsCLHEnTDkB3w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "738509308633-uth1ggpiso793siio12tla59gi3ha97i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "738509308633-ceubt6o7rcolbs8ej6u3s1vlissbbdei.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.climb"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

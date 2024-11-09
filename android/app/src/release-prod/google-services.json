@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "772573940472",
+    "project_id": "climb-ea0f4",
+    "storage_bucket": "climb-ea0f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772573940472:android:4787768a324c24738a890d",
+        "android_client_info": {
+          "package_name": "com.LiberoSpace.climb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQRv-UvpGEVbXK6i81KhZfcStGJDa4unk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
