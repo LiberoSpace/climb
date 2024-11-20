@@ -155,7 +155,6 @@ class _VideoDetailPageState extends State<ExerciseRecordVideosDetailPage> {
                       onPageChanged: _onPageChanged,
                       controller: _pageController,
                       itemBuilder: (context, index) {
-                        print(_controllers[index].value.size);
                         return Stack(
                           children: [
                             Container(
@@ -204,10 +203,6 @@ class _VideoDetailPageState extends State<ExerciseRecordVideosDetailPage> {
                           icon: const Icon(
                             Icons.arrow_back_ios,
                           ),
-                        ),
-                        titleSpacing: 0,
-                        title: Text(
-                          _videoWithThumbnail.video.fileName,
                         ),
                       ),
                     ),

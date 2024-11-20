@@ -202,10 +202,6 @@ class _VideoDetailPageState extends State<VideosDetailPage> {
                             Icons.arrow_back_ios,
                           ),
                         ),
-                        titleSpacing: 0,
-                        title: Text(
-                          _videoWithThumbnail.video.fileName,
-                        ),
                       ),
                     ),
                   ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:climb/pages/exercise_records_page.dart';
 import 'package:climb/pages/sign_up_page.dart';
 import 'package:climb/styles/app_colors.dart';
@@ -98,48 +100,51 @@ class SingInPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const Gap(16),
-                    TextButton(
-                      onPressed: () {
-                        userAuthProvider.handleSignIn(AuthPlatForm.apple).then(
-                              (result) => afterSignIn(result),
-                            );
-                      },
-                      style: ButtonStyle(
-                        alignment: Alignment.center,
-                        backgroundColor: const WidgetStatePropertyAll(
-                          colorLightGray,
-                        ),
-                        shape: WidgetStatePropertyAll(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              8.0,
+                    if (Platform.isIOS) const Gap(16),
+                    if (Platform.isIOS)
+                      TextButton(
+                        onPressed: () {
+                          userAuthProvider
+                              .handleSignIn(AuthPlatForm.apple)
+                              .then(
+                                (result) => afterSignIn(result),
+                              );
+                        },
+                        style: ButtonStyle(
+                          alignment: Alignment.center,
+                          backgroundColor: const WidgetStatePropertyAll(
+                            colorLightGray,
+                          ),
+                          shape: WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                8.0,
+                              ),
+                            ),
+                          ),
+                          padding: const WidgetStatePropertyAll(
+                            EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12,
                             ),
                           ),
                         ),
-                        padding: const WidgetStatePropertyAll(
-                          EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/apple_logo.png',
+                              height: 24,
+                              width: 24,
+                            ),
+                            const Gap(12),
+                            Text(
+                              '애플로 로그인',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ],
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/apple_logo.png',
-                            height: 24,
-                            width: 24,
-                          ),
-                          const Gap(12),
-                          Text(
-                            '애플로 로그인',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ),
                     const Gap(16),
                     TextButton(
                       onPressed: () {

@@ -23,6 +23,7 @@
         "Uids",
         "unfocus",
         "vsync",
+        "Wakelock",
         "xcconfig"
     ]
 }

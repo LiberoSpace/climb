@@ -27,6 +27,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as video_thumbnail;
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class CameraPage extends StatefulWidget {
   static String routerName = 'Camera';
@@ -1029,6 +1030,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       return;
     }
 
+    WakelockPlus.disable();
     if (recordResult == 2) {
       // 녹화 취소
       await _stopVideoRecording();
@@ -1127,6 +1129,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     try {
       // 비디오 시작 및 타이머 재생
       await _controller.startVideoRecording();
+      WakelockPlus.enable();
 
       _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (mounted) {
@@ -1178,6 +1181,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     // Dispose of the controller when the widget is disposed.
     _controller.dispose();
     WidgetsBinding.instance.removeObserver(this);
+    WakelockPlus.disable();
     super.dispose();
   }
 }

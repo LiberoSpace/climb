@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:climb/constants/routes.dart';
 import 'package:climb/pages/sing_in_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -57,19 +55,20 @@ class UserAuthProvider extends ChangeNotifier {
   }
 
   Future<int> handleSignIn(AuthPlatForm authPlatForm) async {
-    UserCredential userCredential = await _signInWithGoogle();
+    late UserCredential userCredential;
 
     // 종류별 SignIn처리
-    // if (authPlatForm == AuthPlatForm.google) {
-    //   userCredential = await signInWithGoogle();
-    // }
-    // else if (authPlatForm == AuthPlatForm.google) {
-    // } else if (authPlatForm == AuthPlatForm.google) {}
+    if (authPlatForm == AuthPlatForm.google) {
+      userCredential = await _signInWithGoogle();
+    } else if (authPlatForm == AuthPlatForm.apple) {
+      userCredential = await _signInWithApple();
+    } else {
+      throw Exception(['error sign in platform']);
+    }
 
     if (userCredential.user != null) {
       // 신규 가입
-      if (userCredential.additionalUserInfo != null &&
-          userCredential.additionalUserInfo!.isNewUser) {
+      if (userCredential.additionalUserInfo?.isNewUser == true) {
         return 2;
       }
 
@@ -84,7 +83,7 @@ class UserAuthProvider extends ChangeNotifier {
     return 0;
   }
 
-  Future<void> signUp({
+  Future<bool> signUp({
     required String nickName,
     required DateTime birthDay,
     required int gender,
@@ -96,11 +95,19 @@ class UserAuthProvider extends ChangeNotifier {
   }) async {
     try {
       if (_user == null) {
-        return;
+        return false;
       }
-      if (_user!.email == null) {
+      var email = _user!.email;
+      if (_user!.providerData[0].providerId == 'apple.com') {
+        if (_user!.providerData[0].email == null) {
+          Fluttertoast.showToast(msg: '이메일이 없습니다. 문의해주세요');
+          return false;
+        }
+
+        email = _user!.providerData[0].email;
+      } else if (email == null) {
         Fluttertoast.showToast(msg: '이메일이 없습니다. 문의해주세요');
-        return;
+        return false;
       }
       var uid = _user!.uid;
 
@@ -110,7 +117,7 @@ class UserAuthProvider extends ChangeNotifier {
             AppUser(
               birthDay: birthDay,
               gender: gender,
-              email: _user!.email!,
+              email: email!,
               weight: weight,
             ),
             uid),
@@ -124,6 +131,8 @@ class UserAuthProvider extends ChangeNotifier {
             ),
             uid),
       ]);
+
+      return true;
     } catch (e) {
       print(e);
       rethrow;
@@ -166,6 +175,16 @@ class UserAuthProvider extends ChangeNotifier {
     } catch (e) {
       print(e);
       rethrow;
+    }
+  }
+
+  Future<UserCredential> _signInWithApple() async {
+    final appleProvider = AppleAuthProvider();
+    appleProvider.addScope('email');
+    if (kIsWeb) {
+      return await FirebaseAuth.instance.signInWithPopup(appleProvider);
+    } else {
+      return await FirebaseAuth.instance.signInWithProvider(appleProvider);
     }
   }
 

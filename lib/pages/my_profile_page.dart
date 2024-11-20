@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:climb/database/database.dart';
 import 'package:climb/database_services/exercise_record_service.dart';
 import 'package:climb/database_services/video_service.dart';
@@ -50,6 +52,7 @@ class _MyProfilePageState extends State<MyProfilePage>
 
     if (_userAuthProvider.appUser == null ||
         _userAuthProvider.userProfile == null) {
+      log('no user');
       _userAuthProvider.signOut(context);
       return;
     }
