@@ -124,7 +124,7 @@ class _SettingsPageState extends State<SettingsPage> {
             onTapBar: () {
               showLicensePage(
                   context: context,
-                  applicationIcon: Image.asset('assets/images/climb_logo.png'));
+                  applicationIcon: Image.asset('assets/logos/climb_logo.png'));
             },
           ),
         ],

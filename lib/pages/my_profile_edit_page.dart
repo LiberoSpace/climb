@@ -595,13 +595,14 @@ class _MyProfileEditPageState extends State<MyProfileEditPage> {
                               : null,
                           style: ButtonStyle(
                             alignment: Alignment.center,
-                            backgroundColor:
-                                WidgetStateProperty.resolveWith((states) {
-                              if (states.contains(WidgetState.disabled)) {
-                                return colorGray;
-                              }
-                              return colorOrange;
-                            }),
+                            backgroundColor: WidgetStateProperty.resolveWith(
+                              (states) {
+                                if (states.contains(WidgetState.disabled)) {
+                                  return colorGray;
+                                }
+                                return colorOrange;
+                              },
+                            ),
                             shape: WidgetStatePropertyAll(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),

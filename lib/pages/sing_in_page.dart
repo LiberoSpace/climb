@@ -5,7 +5,6 @@ import 'package:climb/pages/sign_up_page.dart';
 import 'package:climb/styles/app_colors.dart';
 import 'package:climb/constants/config.dart';
 import 'package:climb/providers/user_auth_provider.dart';
-import 'package:climb/styles/elevated_button_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -47,7 +46,7 @@ class SingInPage extends StatelessWidget {
                   children: [
                     ClipOval(
                       child: SvgPicture.asset(
-                        'assets/icons/climb_logo.svg',
+                        'assets/logos/climb_logo.svg',
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
@@ -56,6 +55,48 @@ class SingInPage extends StatelessWidget {
                   ],
                 ),
                 const Gap(80),
+                TextButton(
+                  onPressed: () {
+                    userAuthProvider.handleSignIn(AuthPlatForm.kakao).then(
+                          (result) => afterSignIn(result),
+                        );
+                  },
+                  style: ButtonStyle(
+                    alignment: Alignment.center,
+                    backgroundColor: const WidgetStatePropertyAll(
+                      Color(0xffFEE500),
+                    ),
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          8.0,
+                        ),
+                      ),
+                    ),
+                    padding: const WidgetStatePropertyAll(
+                      EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/logos/kakao_logo.png',
+                        height: 24,
+                        width: 24,
+                      ),
+                      const Gap(12),
+                      Text(
+                        '카카오로 로그인',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(16),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -68,12 +109,16 @@ class SingInPage extends StatelessWidget {
                       style: ButtonStyle(
                         alignment: Alignment.center,
                         backgroundColor: const WidgetStatePropertyAll(
-                          colorLightGray,
+                          Color(0xffFFFFFF),
                         ),
                         shape: WidgetStatePropertyAll(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                               8.0,
+                            ),
+                            side: const BorderSide(
+                              color: Color(0xff000000),
+                              width: 1,
                             ),
                           ),
                         ),
@@ -88,7 +133,7 @@ class SingInPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            'assets/images/google_logo.png',
+                            'assets/logos/google_logo.png',
                             height: 24,
                             width: 24,
                           ),
@@ -111,9 +156,12 @@ class SingInPage extends StatelessWidget {
                               );
                         },
                         style: ButtonStyle(
+                          overlayColor: WidgetStatePropertyAll(
+                            const Color(0xffFFFFFF).withOpacity(0.15),
+                          ),
                           alignment: Alignment.center,
                           backgroundColor: const WidgetStatePropertyAll(
-                            colorLightGray,
+                            Color(0xff000000),
                           ),
                           shape: WidgetStatePropertyAll(
                             RoundedRectangleBorder(
@@ -133,60 +181,22 @@ class SingInPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset(
-                              'assets/images/apple_logo.png',
+                              'assets/logos/apple_logo.png',
                               height: 24,
                               width: 24,
+                              color: const Color(0xffFFFFFF),
                             ),
                             const Gap(12),
                             Text(
                               '애플로 로그인',
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(color: const Color(0xffFFFFFF)),
                             ),
                           ],
                         ),
                       ),
-                    const Gap(16),
-                    TextButton(
-                      onPressed: () {
-                        userAuthProvider.handleSignIn(AuthPlatForm.kakao).then(
-                              (result) => afterSignIn(result),
-                            );
-                      },
-                      style: ButtonStyle(
-                        alignment: Alignment.center,
-                        backgroundColor: const WidgetStatePropertyAll(
-                          colorLightGray,
-                        ),
-                        shape: WidgetStatePropertyAll(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              8.0,
-                            ),
-                          ),
-                        ),
-                        padding: const WidgetStatePropertyAll(
-                          EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
-                          ),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/kakao_logo.png',
-                            height: 24,
-                            width: 24,
-                          ),
-                          const Gap(12),
-                          Text(
-                            '카카오로 로그인',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ],

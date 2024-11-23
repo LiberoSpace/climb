@@ -55,7 +55,7 @@ class _SplashPageState extends State<SplashPage> {
         child: ClipOval(
           clipBehavior: Clip.hardEdge,
           child: Image.asset(
-            'assets/images/climb_logo.png',
+            'assets/logos/climb_logo.png',
             width: 100,
             height: 100,
             fit: BoxFit.cover,
