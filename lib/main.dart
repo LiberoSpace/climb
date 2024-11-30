@@ -203,15 +203,6 @@ class App extends StatelessWidget {
             ),
             iconTheme: const IconThemeData(size: 24),
             actionsIconTheme: const IconThemeData(size: 24),
-            systemOverlayStyle: SystemUiOverlayStyle(
-              statusBarColor:
-                  Theme.of(context).scaffoldBackgroundColor, // Status bar
-              statusBarBrightness: Brightness.dark,
-              statusBarIconBrightness: Brightness.dark,
-              systemNavigationBarColor:
-                  Theme.of(context).scaffoldBackgroundColor, // Navigation bar
-              systemNavigationBarIconBrightness: Brightness.dark,
-            ),
           ),
           textTheme: climbTextTheme,
           dividerTheme: const DividerThemeData(

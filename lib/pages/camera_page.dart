@@ -296,10 +296,9 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         appBar: AppBar(
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: colorBlack,
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.light,
+            statusBarBrightness: Brightness.dark,
             systemNavigationBarColor: colorBlack,
-            systemNavigationBarIconBrightness: Brightness.light,
+            systemNavigationBarIconBrightness: Brightness.dark,
           ),
           leading: IconButton(
             onPressed: () => context.pop(),
