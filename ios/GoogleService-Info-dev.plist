@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>772573940472-76lc8l7k121fmq2neq1jbjsnklvc6ve0.apps.googleusercontent.com</string>
+	<string>738509308633-uniaqjao34cmv71t4mv0o5oln3j5mje3.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.772573940472-76lc8l7k121fmq2neq1jbjsnklvc6ve0</string>
+	<string>com.googleusercontent.apps.738509308633-uniaqjao34cmv71t4mv0o5oln3j5mje3</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>738509308633-40p8e3pk11aqd4sqnlmg2opv3lj0g65o.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyArvsaQ3_Mw2Trz8EzrX8Dj9fXO6VDi1Rs</string>
+	<string>AIzaSyBVBA1VNjCUnrHZFCoir1TbWangZtowqb8</string>
 	<key>GCM_SENDER_ID</key>
-	<string>772573940472</string>
+	<string>738509308633</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.LiberoSpace.climb</string>
+	<string>com.LiberoSpace.climb.dev</string>
 	<key>PROJECT_ID</key>
-	<string>climb-ea0f4</string>
+	<string>climb-town-5981f</string>
 	<key>STORAGE_BUCKET</key>
-	<string>climb-ea0f4.appspot.com</string>
+	<string>climb-town-5981f.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:772573940472:ios:72b69b80faccc3428a890d</string>
+	<string>1:738509308633:ios:d06560325563a1df0674c8</string>
 </dict>
 </plist>

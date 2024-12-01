@@ -24,12 +24,19 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<!-- 목적 문자열 -->
 	<key>NSCameraUsageDescription</key>
-	<string>Required for the ability to record climbing videos within the app.</string>
+	<string>클라이밍 비디오를 촬영하기 위해 꼭 필요해요</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Required for the ability to record climbing videos within the app</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We need add only access to save medias</string>
+	<string>클라이밍 비디오를 촬영하기 위해 꼭 필요해요</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>프로필 사진을 등록하거나 비디오를 갤러리로 내보내려면 꼭 필요해요</string>
+
+	<!-- 수출 규정 -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
