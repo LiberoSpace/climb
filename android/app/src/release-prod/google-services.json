@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:772573940472:android:4787768a324c24738a890d",
+        "mobilesdk_app_id": "1:772573940472:android:8dbc6727d0382fd68a890d",
         "android_client_info": {
           "package_name": "com.LiberoSpace.climb"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "772573940472-sjorheuriupa0cb6mtg0fukdbs2aeqdg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCQRv-UvpGEVbXK6i81KhZfcStGJDa4unk"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "772573940472-sjorheuriupa0cb6mtg0fukdbs2aeqdg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "772573940472-76lc8l7k121fmq2neq1jbjsnklvc6ve0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.LiberoSpace.climb"
+              }
+            }
+          ]
         }
       }
     }
