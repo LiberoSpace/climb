@@ -1,17 +1,14 @@
 {
   "images" : [
     {
-      "filename" : "climb_logo_circle1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "climb_logo_circle2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "climb_logo_circle3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
