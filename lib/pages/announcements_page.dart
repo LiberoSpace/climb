@@ -1,7 +1,5 @@
 import 'package:climb/models/announcement_model.dart';
 import 'package:climb/pages/announcement_detail_page.dart';
-import 'package:climb/pages/settings_page.dart';
-import 'package:climb/styles/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

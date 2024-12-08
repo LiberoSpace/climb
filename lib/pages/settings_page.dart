@@ -100,11 +100,11 @@ class _SettingsPageState extends State<SettingsPage> {
           const MiddleTitleBar(
             title: '사용자 설정',
           ),
-          ContentTitleBar(
-            onTapBar: () => context.pushNamed(AccountInfoPage.routerName),
-            title: '계정 정보',
-            tail: const Icon(Icons.arrow_forward_ios_outlined),
-          ),
+          // ContentTitleBar(
+          //   onTapBar: () => context.pushNamed(AccountInfoPage.routerName),
+          //   title: '계정 정보',
+          //   tail: const Icon(Icons.arrow_forward_ios_outlined),
+          // ),
           const TitleDivider(),
           const MiddleTitleBar(
             title: '법적 고지',

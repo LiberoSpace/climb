@@ -1,13 +1,10 @@
-import 'package:climb/pages/exercise_record_detail_page.dart';
-import 'package:climb/styles/app_colors.dart';
-import 'package:climb/constants/routes.dart';
 import 'package:climb/database_services/exercise_record_service.dart';
+import 'package:climb/pages/exercise_record_detail_page.dart';
 import 'package:climb/providers/app_directory_provider.dart';
-import 'package:climb/styles/elevated_button_style.dart';
+import 'package:climb/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ExerciseRecordButton extends StatelessWidget {
   final ExerciseRecordWithJoin item;
@@ -53,9 +50,8 @@ class ExerciseRecordButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ClipOval(
-            child: Image.file(
-              _appDirectoryProvider
-                  .getLocationImageFile(item.location.locationUid),
+            child: Image.asset(
+              'assets/location_thumbnails/${item.location.locationUid}.jpeg',
               width: imageSize,
               height: imageSize,
               fit: BoxFit.cover,

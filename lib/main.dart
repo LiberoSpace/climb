@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:climb/firebase_options.dart';
 import 'package:climb/providers/camera_provider.dart';
 import 'package:climb/styles/app_colors.dart';
 import 'package:climb/styles/app_fonts.dart';
@@ -38,7 +39,9 @@ Future<void> main() async {
   });
 
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // font
   GoogleFonts.config.allowRuntimeFetching = false;
@@ -132,7 +135,7 @@ class App extends StatelessWidget {
     // });
 
     /** image picker가 메모리를 정리했을 경우에 앱을 다시 키고 가져와야 함. */
-    //     Future<void> getLostData() async {
+    //   Future<void> getLostData() async {
     //   final ImagePicker picker = ImagePicker();
     //   final LostDataResponse response = await picker.retrieveLostData();
     //   if (response.isEmpty) {

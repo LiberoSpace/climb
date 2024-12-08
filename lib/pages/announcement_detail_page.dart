@@ -1,5 +1,4 @@
 import 'package:climb/models/announcement_model.dart';
-import 'package:climb/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';

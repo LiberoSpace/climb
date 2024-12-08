@@ -1,11 +1,37 @@
 import 'package:climb/database/database.dart';
 import 'package:drift/drift.dart';
-import 'package:flutter/foundation.dart';
 
 class LocationService {
   final AppDatabase db;
 
   LocationService({required this.db});
+
+  Future<List<Location>> getLocations({String? search}) async {
+    try {
+      if (search == null) {
+        return await (db.select(db.locations)
+              ..orderBy(
+                [
+                  // 최신순 정렬. 예상 파일 명 2024.06.02_더클라임 연남
+                  (t) => OrderingTerm(
+                        expression: t.locationName,
+                        mode: OrderingMode.desc,
+                      )
+                ],
+              ))
+            .get();
+      }
+      if (search.contains('--')) {
+        throw Exception('sql inject');
+      }
+      return await (db.select(db.locations)
+            ..where((tbl) => tbl.locationName.like('%$search%')))
+          .get();
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
 
   Future<Location> getLocation(int locationId) async {
     try {

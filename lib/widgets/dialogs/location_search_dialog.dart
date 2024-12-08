@@ -175,120 +175,119 @@ class _LocationSearchDialogState extends State<LocationSearchDialog> {
   }
 
   void _onPressedLocation(
-      String locationName, String locationUid, bool isRecentRecord) async {
+      String locationName, int locationId, bool isRecentRecord) async {
     try {
-      var location =
-          await _locationService.getLocationByLocationUid(locationUid);
-
-      if (isRecentRecord && location != null) {
-        if (mounted) {
-          context.pop({
-            "locationId": location.id,
-            "locationName": location.locationName,
-          });
-          return;
-        }
+      var location = await _locationService.getLocation(locationId);
+      if (mounted) {
+        context.pop({
+          "locationId": location.id,
+          "locationName": location.locationName,
+        });
+        return;
       }
+      // if (isRecentRecord) {
+      //   if (mounted) {
+      //     context.pop({
+      //       "locationId": location.id,
+      //       "locationName": location.locationName,
+      //     });
+      //     return;
+      //   }
+      // }
 
-      if (location == null) {
-        var locationId = await _locationService.createLocation(
-            locationUid: locationUid, locationName: locationName);
-        location = await _locationService.getLocation(locationId);
-      } else {
-        await _locationService.updateLocation(
-            locationId: location.id, locationName: locationName);
-      }
+      // await _locationService.updateLocation(
+      //     locationId: location.id, locationName: locationName);
 
-      await _locationThumbnailDownload(location);
-      await downloadDifficulties(locationUid, location.id);
+      // await _locationThumbnailDownload(location);
+      // await downloadDifficulties(locationUid, location.id);
     } catch (e) {
       print(e);
       rethrow;
     }
   }
 
-  _locationThumbnailDownload(Location location) async {
-    try {
-      final storageRef =
-          this.storageRef.child("locations/${location.locationUid}.jpeg");
-      final appDocDir = _appDirectoryProvider.appDocDir;
-      final dirPath = "${appDocDir.path}/locations";
-      final filePath = "$dirPath/${location.locationUid}.jpeg";
-      final file = File(filePath);
+  // _locationThumbnailDownload(Location location) async {
+  //   try {
+  //     final storageRef =
+  //         this.storageRef.child("locations/${location.locationUid}.jpeg");
+  //     final appDocDir = _appDirectoryProvider.appDocDir;
+  //     final dirPath = "${appDocDir.path}/locations";
+  //     final filePath = "$dirPath/${location.locationUid}.jpeg";
+  //     final file = File(filePath);
 
-      // 디렉터리가 없으면 생성
-      final directory = Directory(dirPath);
-      if (!directory.existsSync()) {
-        await directory.create(recursive: true);
-      }
+  //     // 디렉터리가 없으면 생성
+  //     final directory = Directory(dirPath);
+  //     if (!directory.existsSync()) {
+  //       await directory.create(recursive: true);
+  //     }
 
-      final downloadTask = storageRef.writeToFile(file);
+  //     final downloadTask = storageRef.writeToFile(file);
 
-      downloadTask.then(
-        (value) {
-          if (mounted) {
-            context.pop({
-              "locationId": location.id,
-              "locationName": location.locationName,
-            });
-          }
-        },
-        onError: (e) => print(e),
-      );
-    } catch (e) {
-      print(e);
-    }
-  }
+  //     downloadTask.then(
+  //       (value) {
+  //         if (mounted) {
+  //           context.pop({
+  //             "locationId": location.id,
+  //             "locationName": location.locationName,
+  //           });
+  //         }
+  //       },
+  //       onError: (e) => print(e),
+  //     );
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
-  downloadDifficulties(String locationUid, int locationId) async {
-    try {
-      var difficultiesRef =
-          firestore.collection("/locations/$locationUid/difficulties");
+  // downloadDifficulties(String locationUid, int locationId) async {
+  //   try {
+  //     var difficultiesRef =
+  //         firestore.collection("/locations/$locationUid/difficulties");
 
-      var querySnapshot = await difficultiesRef.get();
-      var dbDifficulties = await _difficultyService.getDifficulties(locationId);
+  //     var querySnapshot = await difficultiesRef.get();
+  //     var dbDifficulties = await _difficultyService.getDifficulties(locationId);
 
-      // drift DB에 없으면 추가
-      for (var docSnapshot in querySnapshot.docs) {
-        var isExist = false;
-        for (var dbDifficulty in dbDifficulties) {
-          if (dbDifficulty.uid == docSnapshot.id) {
-            isExist = true;
-            break;
-          }
-        }
-        if (isExist) {
-          continue;
-        }
-        await _difficultyService.createDifficulty(
-            uid: docSnapshot.id,
-            name: docSnapshot.data()['name'],
-            colorValue:
-                int.parse('0xFF${docSnapshot.data()['colorValueString']}'),
-            score: docSnapshot.data()['score'],
-            locationId: locationId);
-      }
+  //     // drift DB에 없으면 추가
+  //     for (var docSnapshot in querySnapshot.docs) {
+  //       var isExist = false;
+  //       for (var dbDifficulty in dbDifficulties) {
+  //         if (dbDifficulty.uid == docSnapshot.id) {
+  //           isExist = true;
+  //           break;
+  //         }
+  //       }
+  //       if (isExist) {
+  //         continue;
+  //       }
+  //       await _difficultyService.createDifficulty(
+  //           uid: docSnapshot.id,
+  //           name: docSnapshot.data()['name'],
+  //           colorValue:
+  //               int.parse('0xFF${docSnapshot.data()['colorValueString']}'),
+  //           score: docSnapshot.data()['score'],
+  //           locationId: locationId);
+  //     }
 
-      for (var dbDifficulty in dbDifficulties) {
-        // drift DB 난이도가 firestore 난이도에 존재하는지 확인
-        var isActive = false;
-        for (var docSnapshot in querySnapshot.docs) {
-          if (dbDifficulty.uid == docSnapshot.id) {
-            isActive = true;
-            break;
-          }
-        }
-        if (isActive) {
-          continue;
-        }
-        await _difficultyService.updateDifficulty(
-          difficultyId: dbDifficulty.id,
-          isActive: isActive,
-        );
-      }
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  //     for (var dbDifficulty in dbDifficulties) {
+  //       // drift DB 난이도가 firestore 난이도에 존재하는지 확인
+  //       var isActive = false;
+  //       for (var docSnapshot in querySnapshot.docs) {
+  //         if (dbDifficulty.uid == docSnapshot.id) {
+  //           isActive = true;
+  //           break;
+  //         }
+  //       }
+  //       if (isActive) {
+  //         continue;
+  //       }
+  //       await _difficultyService.updateDifficulty(
+  //         difficultyId: dbDifficulty.id,
+  //         isActive: isActive,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //     rethrow;
+  //   }
+  // }
 }

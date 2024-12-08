@@ -1,8 +1,7 @@
+import 'package:climb/database/database.dart';
 import 'package:climb/database_services/video_service.dart';
 import 'package:climb/pages/exercise_record_videos_detail_page.dart';
 import 'package:climb/styles/app_colors.dart';
-import 'package:climb/constants/routes.dart';
-import 'package:climb/database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

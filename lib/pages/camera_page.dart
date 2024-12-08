@@ -3,17 +3,18 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:camera/camera.dart';
-import 'package:climb/pages/exercise_record_detail_page.dart';
-import 'package:climb/providers/camera_provider.dart';
-import 'package:climb/providers/user_auth_provider.dart';
-import 'package:climb/styles/app_colors.dart';
 import 'package:climb/constants/routes.dart';
 import 'package:climb/database/database.dart';
 import 'package:climb/database_services/climbing_problem_service.dart';
 import 'package:climb/database_services/difficulty_service.dart';
 import 'package:climb/database_services/exercise_record_service.dart';
-import 'package:climb/providers/app_directory_provider.dart';
 import 'package:climb/database_services/video_service.dart';
+import 'package:climb/pages/exercise_record_detail_page.dart';
+import 'package:climb/pages/exercise_records_page.dart';
+import 'package:climb/providers/app_directory_provider.dart';
+import 'package:climb/providers/camera_provider.dart';
+import 'package:climb/providers/user_auth_provider.dart';
+import 'package:climb/styles/app_colors.dart';
 import 'package:climb/utils/get_file_size.dart';
 import 'package:climb/widgets/dialogs/confirmation_dialog.dart';
 import 'package:climb/widgets/dialogs/location_search_dialog.dart';
@@ -301,7 +302,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             systemNavigationBarIconBrightness: Brightness.dark,
           ),
           leading: IconButton(
-            onPressed: () => context.pop(),
+            onPressed: () => context.goNamed(ExerciseRecordsPage.routerName),
             icon: const Icon(
               Icons.arrow_back_ios,
             ),
@@ -405,11 +406,8 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       ClipOval(
-                                        child: Image.file(
-                                          _appDirectoryProvider
-                                              .getLocationImageFile(
-                                                  _exerciseRecord!
-                                                      .location.locationUid),
+                                        child: Image.asset(
+                                          'assets/location_thumbnails/${_exerciseRecord!.location.locationUid}.jpeg',
                                           width: 36,
                                           height: 36,
                                           fit: BoxFit.cover,
@@ -1128,7 +1126,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     try {
       // 비디오 시작 및 타이머 재생
       await _controller.startVideoRecording();
-      WakelockPlus.enable();
+      await WakelockPlus.enable();
 
       _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (mounted) {

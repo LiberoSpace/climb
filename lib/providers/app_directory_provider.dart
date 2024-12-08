@@ -129,14 +129,14 @@ class AppDirectoryProvider {
     }
   }
 
-  File getLocationImageFile(String locationUid) {
-    try {
-      return File("$docPath/locations/$locationUid.jpeg");
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  // File getLocationImageFile(String locationUid) {
+  //   try {
+  //     return File("$docPath/locations/$locationUid.jpeg");
+  //   } catch (e) {
+  //     print(e);
+  //     rethrow;
+  //   }
+  // }
 
   // List<FileSystemEntity> getFilesInOrder() {
   //   return videoNames.map((name) => _fileMap[name]).toList();

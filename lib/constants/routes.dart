@@ -1,22 +1,9 @@
-import 'package:climb/pages/account_info_page.dart';
-import 'package:climb/pages/announcement_detail_page.dart';
-import 'package:climb/pages/announcements_page.dart';
 import 'package:climb/pages/camera_page.dart';
 import 'package:climb/pages/error_page.dart';
 import 'package:climb/pages/exercise_record_detail_page.dart';
 import 'package:climb/pages/exercise_record_videos_detail_page.dart';
 import 'package:climb/pages/exercise_records_page.dart';
-import 'package:climb/pages/inquire_page.dart';
-import 'package:climb/pages/town_page.dart';
-import 'package:climb/pages/my_profile_edit_page.dart';
-import 'package:climb/pages/my_profile_page.dart';
-import 'package:climb/pages/settings_page.dart';
-import 'package:climb/pages/sign_up_page.dart';
-import 'package:climb/pages/sign_up_second_page.dart';
-import 'package:climb/pages/sing_in_page.dart';
 import 'package:climb/pages/splash_page.dart';
-import 'package:climb/pages/videos_detail_page.dart';
-import 'package:climb/pages/videos_page.dart';
 import 'package:climb/styles/app_colors.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -41,19 +28,19 @@ class CustomRouter {
               ),
             ],
           ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: pathMyProfile,
-                name: MyProfilePage.routerName,
-                pageBuilder: (BuildContext context, GoRouterState state) {
-                  return const NoTransitionPage(
-                    child: MyProfilePage(),
-                  );
-                },
-              ),
-            ],
-          ),
+          // StatefulShellBranch(
+          //   routes: [
+          //     GoRoute(
+          //       path: pathMyProfile,
+          //       name: MyProfilePage.routerName,
+          //       pageBuilder: (BuildContext context, GoRouterState state) {
+          //         return const NoTransitionPage(
+          //           child: MyProfilePage(),
+          //         );
+          //       },
+          //     ),
+          //   ],
+          // ),
         ],
         builder: (context, state, navigationShell) => Scaffold(
           body: navigationShell,
@@ -113,25 +100,25 @@ class CustomRouter {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        if (navigationShell.currentIndex == 1) {
-                          // 현재 페이지면 패스
-                          return;
-                        }
+                  // Expanded(
+                  //   child: GestureDetector(
+                  //     onTap: () {
+                  //       if (navigationShell.currentIndex == 1) {
+                  //         // 현재 페이지면 패스
+                  //         return;
+                  //       }
 
-                        navigationShell.goBranch(1);
-                      },
-                      child: SizedBox(
-                        child: Icon(Icons.person_outlined,
-                            size: 32,
-                            color: navigationShell.currentIndex == 1
-                                ? colorOrange
-                                : null),
-                      ),
-                    ),
-                  ),
+                  //       navigationShell.goBranch(1);
+                  //     },
+                  //     child: SizedBox(
+                  //       child: Icon(Icons.person_outlined,
+                  //           size: 32,
+                  //           color: navigationShell.currentIndex == 1
+                  //               ? colorOrange
+                  //               : null),
+                  //     ),
+                  //   ),
+                  // ),
                   // Expanded(
                   //   child: GestureDetector(
                   //     onTap: () {
@@ -193,74 +180,75 @@ class CustomRouter {
           ),
         ],
       ),
-      GoRoute(
-          path: pathVideos,
-          name: VideosPage.routerName,
-          builder: (BuildContext context, GoRouterState state) {
-            return const VideosPage();
-          },
-          routes: [
-            GoRoute(
-              path: pathDetail.substring(1),
-              name: VideosDetailPage.routerName,
-              builder: (BuildContext context, GoRouterState state) {
-                return VideosDetailPage(
-                  initialIndex:
-                      (state.extra as Map<String, dynamic>)["initialIndex"],
-                  videoWithThumbnails: (state.extra
-                      as Map<String, dynamic>)["videoWithThumbnails"],
-                );
-              },
-            ),
-          ]),
-      GoRoute(
-        path: pathTown,
-        name: TownPage.routerName,
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          return const NoTransitionPage(child: TownPage());
-        },
-      ),
-      GoRoute(
-        path: pathSettings,
-        name: SettingsPage.routerName,
-        builder: (BuildContext context, GoRouterState state) {
-          return const SettingsPage();
-        },
-        routes: [
-          GoRoute(
-            path: 'account-info',
-            name: AccountInfoPage.routerName,
-            builder: (context, state) => const AccountInfoPage(),
-          ),
-          GoRoute(
-            path: 'announcement',
-            name: AnnouncementsPage.routerName,
-            builder: (context, state) => const AnnouncementsPage(),
-            routes: [
-              GoRoute(
-                path: ':announcementUid',
-                name: AnnouncementDetailPage.routerName,
-                builder: (context, state) => AnnouncementDetailPage(
-                  announcementModel:
-                      (state.extra as Map<String, dynamic>)["announcement"],
-                ),
-              )
-            ],
-          ),
-          GoRoute(
-            path: 'inquire',
-            name: InquirePage.routerName,
-            builder: (context, state) => const InquirePage(),
-          )
-        ],
-      ),
-      GoRoute(
-        path: pathEdit,
-        name: MyProfileEditPage.routerName,
-        builder: (BuildContext context, GoRouterState state) {
-          return const MyProfileEditPage();
-        },
-      ),
+      // GoRoute(
+      //     path: pathVideos,
+      //     name: VideosPage.routerName,
+      //     builder: (BuildContext context, GoRouterState state) {
+      //       return const VideosPage();
+      //     },
+      //     routes: [
+      //       GoRoute(
+      //         path: pathDetail.substring(1),
+      //         name: VideosDetailPage.routerName,
+      //         builder: (BuildContext context, GoRouterState state) {
+      //           return VideosDetailPage(
+      //             initialIndex:
+      //                 (state.extra as Map<String, dynamic>)["initialIndex"],
+      //             videoWithThumbnails: (state.extra
+      //                 as Map<String, dynamic>)["videoWithThumbnails"],
+      //           );
+      //         },
+      //       ),
+      //     ]),
+      // // GoRoute(
+      //   path: pathTown,
+      //   name: TownPage.routerName,
+      //   pageBuilder: (BuildContext context, GoRouterState state) {
+      //     return const NoTransitionPage(child: TownPage());
+      //   },
+      // ),
+      // GoRoute(
+      //   path: pathSettings,
+      //   name: SettingsPage.routerName,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return const SettingsPage();
+      //   },
+      //   routes: [
+      //     // GoRoute(
+      //     //   path: 'account-info',
+      //     //   name: AccountInfoPage.routerName,
+      //     //   builder: (context, state) => const AccountInfoPage(),
+      //     // ),
+      //     // GoRoute(
+      //     //   path: 'announcement',
+      //     //   name: AnnouncementsPage.routerName,
+      //     //   builder: (context, state) => const AnnouncementsPage(),
+      //     //   routes: [
+      //     //     GoRoute(
+      //     //       path: ':announcementUid',
+      //     //       name: AnnouncementDetailPage.routerName,
+      //     //       builder: (context, state) => AnnouncementDetailPage(
+      //     //         announcementModel:
+      //     //             (state.extra as Map<String, dynamic>)["announcement"],
+      //     //       ),
+      //     //     )
+      //     //   ],
+      //     // ),
+
+      //     GoRoute(
+      //       path: 'inquire',
+      //       name: InquirePage.routerName,
+      //       builder: (context, state) => const InquirePage(),
+      //     )
+      //   ],
+      // ),
+      // GoRoute(
+      //   path: pathEdit,
+      //   name: MyProfileEditPage.routerName,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return const MyProfileEditPage();
+      //   },
+      // ),
       GoRoute(
         path: pathSplash,
         name: SplashPage.routerName,
@@ -268,42 +256,42 @@ class CustomRouter {
           return const SplashPage();
         },
       ),
-      GoRoute(
-        path: pathSignIn,
-        name: SingInPage.routerName,
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          return const NoTransitionPage(child: SingInPage());
-        },
-        routes: [
-          GoRoute(
-            path: pathSignUp.substring(1),
-            name: SignUpPage.routerName,
-            builder: (BuildContext context, GoRouterState state) {
-              return const SignUpPage();
-            },
-            routes: [
-              GoRoute(
-                path: pathSecond.substring(1),
-                name: SignUpSecondPage.routerName,
-                builder: (BuildContext context, GoRouterState state) {
-                  try {
-                    return SignUpSecondPage(
-                      nickName:
-                          (state.extra as Map<String, dynamic>)["nickName"],
-                      birthDay:
-                          (state.extra as Map<String, dynamic>)["birthDay"],
-                      gender: (state.extra as Map<String, dynamic>)["gender"],
-                      height: (state.extra as Map<String, dynamic>)["height"],
-                    );
-                  } catch (e) {
-                    return const SignUpPage();
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
+      // GoRoute(
+      //   path: pathSignIn,
+      //   name: SingInPage.routerName,
+      //   pageBuilder: (BuildContext context, GoRouterState state) {
+      //     return const NoTransitionPage(child: SingInPage());
+      //   },
+      //   routes: [
+      //     GoRoute(
+      //       path: pathSignUp.substring(1),
+      //       name: SignUpPage.routerName,
+      //       builder: (BuildContext context, GoRouterState state) {
+      //         return const SignUpPage();
+      //       },
+      //       routes: [
+      //         GoRoute(
+      //           path: pathSecond.substring(1),
+      //           name: SignUpSecondPage.routerName,
+      //           builder: (BuildContext context, GoRouterState state) {
+      //             try {
+      //               return SignUpSecondPage(
+      //                 nickName:
+      //                     (state.extra as Map<String, dynamic>)["nickName"],
+      //                 birthDay:
+      //                     (state.extra as Map<String, dynamic>)["birthDay"],
+      //                 gender: (state.extra as Map<String, dynamic>)["gender"],
+      //                 height: (state.extra as Map<String, dynamic>)["height"],
+      //               );
+      //             } catch (e) {
+      //               return const SignUpPage();
+      //             }
+      //           },
+      //         ),
+      //       ],
+      //     ),
+      //   ],
+      // ),
     ],
     observers: [
       RouterObserver(),

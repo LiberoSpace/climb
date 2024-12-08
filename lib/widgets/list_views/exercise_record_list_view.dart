@@ -1,12 +1,8 @@
-import 'package:climb/styles/app_colors.dart';
-import 'package:climb/constants/routes.dart';
 import 'package:climb/database_services/exercise_record_service.dart';
 import 'package:climb/providers/app_directory_provider.dart';
-import 'package:climb/styles/elevated_button_style.dart';
+import 'package:climb/styles/app_colors.dart';
 import 'package:climb/widgets/exercise_record_button.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseRecordListView extends StatefulWidget {

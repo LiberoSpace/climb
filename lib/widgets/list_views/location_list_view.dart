@@ -1,10 +1,7 @@
-import 'dart:io';
-
-import 'package:climb/styles/app_colors.dart';
 import 'package:climb/database_services/exercise_record_service.dart';
-import 'package:climb/providers/app_directory_provider.dart';
+import 'package:climb/database_services/location_service.dart';
+import 'package:climb/styles/app_colors.dart';
 import 'package:climb/styles/elevated_button_style.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class LocationListView extends StatefulWidget {
   final String? word;
-  final Function(String locationName, String locationUid, bool isRecentRecord)
+  final Function(String locationName, int locationUid, bool isRecentRecord)
       onPressedLocation;
 
   const LocationListView({
@@ -27,36 +24,34 @@ class LocationListView extends StatefulWidget {
 
 class _LocationListViewState extends State<LocationListView> {
   List<String> _locationNames = <String>[];
+  List<int> _locationIds = <int>[];
   List<String> _locationUids = <String>[];
-  List<File> _locationThumbnailFiles = [];
 
   bool _isRecentRecord = true;
-  late FirebaseFirestore firestore;
   final storageRef = FirebaseStorage.instance.ref();
-  late AppDirectoryProvider _appDirectoryProvider;
   late ExerciseRecordModel _exerciseRecordModel;
+  late LocationService _locationService;
 
   bool isPressed = true;
 
   @override
   void initState() {
     super.initState();
-    firestore = FirebaseFirestore.instance;
-    _appDirectoryProvider = context.read<AppDirectoryProvider>();
     _exerciseRecordModel = context.read<ExerciseRecordModel>();
+    _locationService = context.read<LocationService>();
 
     getRecentLocations();
   }
 
   @override
-  void didUpdateWidget(covariant LocationListView oldWidget) {
+  void didUpdateWidget(covariant LocationListView oldWidget) async {
     super.didUpdateWidget(oldWidget);
     _isRecentRecord = (widget.word == null || widget.word == "") ? true : false;
 
     if (_isRecentRecord) {
       getRecentLocations();
     } else {
-      getLocations();
+      await getLocations();
     }
   }
 
@@ -68,7 +63,7 @@ class _LocationListViewState extends State<LocationListView> {
         return ElevatedButton(
           onPressed: () => widget.onPressedLocation(
             _locationNames[index],
-            _locationUids[index],
+            _locationIds[index],
             _isRecentRecord,
           ),
           style: const ElevatedButtonStyle(
@@ -86,8 +81,8 @@ class _LocationListViewState extends State<LocationListView> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           ClipOval(
-                            child: Image.file(
-                              _locationThumbnailFiles[index],
+                            child: Image.asset(
+                              'assets/location_thumbnails/${_locationUids[index]}.jpeg',
                               width: 32,
                               height: 32,
                               fit: BoxFit.cover,
@@ -120,16 +115,34 @@ class _LocationListViewState extends State<LocationListView> {
                   )
                 : Row(
                     children: [
-                      Text(
-                        _locationNames[index],
-                        textAlign: TextAlign.start,
-                        style: GoogleFonts.inter(
-                          textStyle: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: colorBlack,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ClipOval(
+                            child: Image.asset(
+                              'assets/location_thumbnails/${_locationUids[index]}.jpeg',
+                              width: 32,
+                              height: 32,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            _locationNames[index],
+                            textAlign: TextAlign.start,
+                            style: GoogleFonts.inter(
+                              textStyle: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -151,18 +164,17 @@ class _LocationListViewState extends State<LocationListView> {
   void getRecentLocations() {
     _locationNames = <String>[];
     _locationUids = <String>[];
-    _locationThumbnailFiles = [];
+    _locationIds = <int>[];
 
     // 최근 암장 방문 기록에서 암장 가져오기
-    _exerciseRecordModel.getExerciseRecords().then((exerciseRecords) {
+    _exerciseRecordModel.getExerciseRecords().then((exerciseRecords) async {
       if (exerciseRecords.isNotEmpty) {
         _isRecentRecord = true;
         for (var element in exerciseRecords) {
-          if (!_locationUids.contains(element.location.locationUid)) {
+          if (!_locationIds.contains(element.location.id)) {
             _locationNames.add(element.location.locationName);
+            _locationIds.add(element.location.id);
             _locationUids.add(element.location.locationUid);
-            _locationThumbnailFiles.add(_appDirectoryProvider
-                .getLocationImageFile(element.location.locationUid));
             if (mounted) {
               setState(() {});
             }
@@ -170,7 +182,7 @@ class _LocationListViewState extends State<LocationListView> {
         }
       } else {
         _isRecentRecord = false;
-        getLocations(isAll: true);
+        await getLocations(isAll: true);
         if (mounted) {
           setState(() {});
         }
@@ -178,41 +190,45 @@ class _LocationListViewState extends State<LocationListView> {
     });
   }
 
-  void getLocations({bool isAll = false}) {
+  Future<void> getLocations({bool isAll = false}) async {
     _locationNames = <String>[];
     _locationUids = <String>[];
-    _locationThumbnailFiles = [];
+    _locationIds = <int>[];
 
-    // 검색을 통한 암장 가져오기
-    var locationCollection = firestore.collection("locations");
+    var locations = await _locationService.getLocations(search: widget.word);
 
-    if (isAll) {
-      locationCollection.get().then((querySnapshot) {
-        for (var docSnapshot in querySnapshot.docs) {
-          _locationNames.add(docSnapshot.data()['name']);
-          _locationUids.add(docSnapshot.id);
-          if (mounted) {
-            setState(() {});
-          }
-        }
-      }, onError: (e) => print(e));
-    } else {
-      locationCollection
-          .where('name', isGreaterThanOrEqualTo: widget.word!)
-          .where('name', isLessThanOrEqualTo: '${widget.word!}\uf8ff')
-          .get()
-          .then(
-        (querySnapshot) {
-          for (var docSnapshot in querySnapshot.docs) {
-            _locationNames.add(docSnapshot.data()['name']);
-            _locationUids.add(docSnapshot.id);
-            if (mounted) {
-              setState(() {});
-            }
-          }
-        },
-        onError: (e) => print(e),
-      );
+    // if (isAll) {
+    //   locationCollection.get().then((querySnapshot) {
+    //     for (var docSnapshot in querySnapshot.docs) {
+    //       _locationNames.add(docSnapshot.data()['name']);
+    //       _locationIds.add(docSnapshot.id);
+    //       if (mounted) {
+    //         setState(() {});
+    //       }
+    //     }
+    //   }, onError: (e) => print(e));
+    // } else {
+    //   locationCollection
+    //       .where('name', isGreaterThanOrEqualTo: widget.word!)
+    //       .where('name', isLessThanOrEqualTo: '${widget.word!}\uf8ff')
+    //       .get()
+    //       .then(
+    //     (querySnapshot) {
+    //       for (var docSnapshot in querySnapshot.docs) {
+    //         _locationNames.add(docSnapshot.data()['name']);
+    //         _locationIds.add(docSnapshot.id);
+    //         if (mounted) {
+    //           setState(() {});
+    //         }
+    //       }
+    //     },
+    //     onError: (e) => print(e),
+    //   );
+    // }
+    for (var location in locations) {
+      _locationNames.add(location.locationName);
+      _locationIds.add(location.id);
+      _locationUids.add(location.locationUid);
     }
   }
 }

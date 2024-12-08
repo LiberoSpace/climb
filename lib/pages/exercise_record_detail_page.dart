@@ -1,11 +1,11 @@
 import 'dart:collection';
 import 'dart:io';
 
-import 'package:climb/styles/app_colors.dart';
 import 'package:climb/database/database.dart';
 import 'package:climb/database_services/exercise_record_service.dart';
 import 'package:climb/database_services/video_service.dart';
 import 'package:climb/providers/app_directory_provider.dart';
+import 'package:climb/styles/app_colors.dart';
 import 'package:climb/utils/get_file_size.dart';
 import 'package:climb/widgets/bottom_tool_bar.dart';
 import 'package:climb/widgets/buttons/app_bar_text_button.dart';
