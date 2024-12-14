@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -20,6 +21,7 @@ class UserAuthProvider extends ChangeNotifier {
 
   late int totalVideoCount;
   late int totalContentSizeMb;
+  late ResolutionPreset cameraResolution;
 
   User? _user;
   User? get user => _user;
@@ -39,6 +41,9 @@ class UserAuthProvider extends ChangeNotifier {
   }) {
     totalVideoCount = prefs.getInt('totalVideoCount') ?? 0;
     totalContentSizeMb = prefs.getInt('totalContentSizeMb') ?? 0;
+    cameraResolution = prefs.getInt('resolution') != null
+        ? ResolutionPreset.values[prefs.getInt('resolution')!]
+        : ResolutionPreset.veryHigh;
 
     // auth.authStateChanges().listen((User? user) {
     //   _user = user;
@@ -340,6 +345,16 @@ class UserAuthProvider extends ChangeNotifier {
 
       totalVideoCount = prefs.getInt('totalVideoCount') ?? 0;
       totalContentSizeMb = prefs.getInt('totalContentSizeMb') ?? 0;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  updateResolution(ResolutionPreset resolutionPreset) async {
+    try {
+      await prefs.setInt('resolution', resolutionPreset.index);
+      cameraResolution = resolutionPreset;
       notifyListeners();
     } catch (e) {
       rethrow;

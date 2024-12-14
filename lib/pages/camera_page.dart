@@ -56,7 +56,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   final double _maxZoomLevel = Platform.isAndroid ? 5.0 : 3.0;
   final double _zoomInFactor = 0.01;
   final double _zoomOutFactor = 0.03;
-  ResolutionPreset _resolution = ResolutionPreset.high;
+  late ResolutionPreset _resolution;
 
   late Future<void> _initializeControllerFuture;
   late AppDirectoryProvider _appDirectoryProvider;
@@ -87,6 +87,8 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     _difficultyService = context.read<DifficultyService>();
     _cameraProvider = context.read<CameraProvider>();
     _userAuthProvider = context.read<UserAuthProvider>();
+
+    _resolution = _userAuthProvider.cameraResolution;
 
     if (_cameraProvider.mainCamera == null) {
       context.pop();
@@ -201,7 +203,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       }
 
       if (locationData == null) {
-        context.pop();
+        context.goNamed(ExerciseRecordsPage.routerName);
         return;
       }
 
@@ -234,7 +236,9 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
         .getVideosByExerciseRecordId(
             exerciseRecordId: exerciseRecord.exerciseRecord.id)
         .then(
-      (videos) async {
+      (videoWithJoins) async {
+        var videos =
+            videoWithJoins.map((videoWithJoin) => videoWithJoin.video).toList();
         if (videos.isNotEmpty) {
           _thumbnailImage = (_appDirectoryProvider.getVideoThumbnail(
                   fileName: videos[0].fileName, videoId: videos[0].id))
@@ -458,6 +462,8 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                         resolution: ResolutionPreset.veryHigh,
                                       );
                                       setState(() {});
+                                      _userAuthProvider.updateResolution(
+                                          ResolutionPreset.veryHigh);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -496,6 +502,8 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                         resolution: ResolutionPreset.high,
                                       );
                                       setState(() {});
+                                      _userAuthProvider.updateResolution(
+                                          ResolutionPreset.high);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(

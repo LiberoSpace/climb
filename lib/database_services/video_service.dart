@@ -99,7 +99,7 @@ class VideoService {
     }
   }
 
-  Future<List<Video>> getVideosByExerciseRecordId(
+  Future<List<VideoWithJoin>> getVideosByExerciseRecordId(
       {required int exerciseRecordId}) async {
     try {
       var query = db.select(db.videos).join(
@@ -107,6 +107,10 @@ class VideoService {
           innerJoin(
             db.climbingProblems,
             db.climbingProblems.id.equalsExp(db.videos.climbingProblem),
+          ),
+          innerJoin(
+            db.difficulties,
+            db.difficulties.id.equalsExp(db.climbingProblems.difficulty),
           ),
           innerJoin(
             db.exerciseRecords,
@@ -128,9 +132,17 @@ class VideoService {
           ],
         ));
 
-      return query.map((row) {
-        return row.readTable(db.videos);
-      }).get();
+      var rows = await query.get();
+      return rows
+          .map(
+            (row) => VideoWithJoin(
+              video: row.readTable(db.videos),
+              climbingProblem: row.readTable(db.climbingProblems),
+              exerciseRecord: row.readTable(db.exerciseRecords),
+              difficulty: row.readTable(db.difficulties),
+            ),
+          )
+          .toList();
     } catch (e) {
       print(e);
       return [];

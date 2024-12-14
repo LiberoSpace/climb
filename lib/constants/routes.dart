@@ -3,6 +3,8 @@ import 'package:climb/pages/error_page.dart';
 import 'package:climb/pages/exercise_record_detail_page.dart';
 import 'package:climb/pages/exercise_record_videos_detail_page.dart';
 import 'package:climb/pages/exercise_records_page.dart';
+import 'package:climb/pages/inquire_page.dart';
+import 'package:climb/pages/settings_page.dart';
 import 'package:climb/pages/splash_page.dart';
 import 'package:climb/styles/app_colors.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -207,41 +209,41 @@ class CustomRouter {
       //     return const NoTransitionPage(child: TownPage());
       //   },
       // ),
-      // GoRoute(
-      //   path: pathSettings,
-      //   name: SettingsPage.routerName,
-      //   builder: (BuildContext context, GoRouterState state) {
-      //     return const SettingsPage();
-      //   },
-      //   routes: [
-      //     // GoRoute(
-      //     //   path: 'account-info',
-      //     //   name: AccountInfoPage.routerName,
-      //     //   builder: (context, state) => const AccountInfoPage(),
-      //     // ),
-      //     // GoRoute(
-      //     //   path: 'announcement',
-      //     //   name: AnnouncementsPage.routerName,
-      //     //   builder: (context, state) => const AnnouncementsPage(),
-      //     //   routes: [
-      //     //     GoRoute(
-      //     //       path: ':announcementUid',
-      //     //       name: AnnouncementDetailPage.routerName,
-      //     //       builder: (context, state) => AnnouncementDetailPage(
-      //     //         announcementModel:
-      //     //             (state.extra as Map<String, dynamic>)["announcement"],
-      //     //       ),
-      //     //     )
-      //     //   ],
-      //     // ),
+      GoRoute(
+        path: pathSettings,
+        name: SettingsPage.routerName,
+        builder: (BuildContext context, GoRouterState state) {
+          return const SettingsPage();
+        },
+        routes: [
+          // GoRoute(
+          //   path: 'account-info',
+          //   name: AccountInfoPage.routerName,
+          //   builder: (context, state) => const AccountInfoPage(),
+          // ),
+          // GoRoute(
+          //   path: 'announcement',
+          //   name: AnnouncementsPage.routerName,
+          //   builder: (context, state) => const AnnouncementsPage(),
+          //   routes: [
+          //     GoRoute(
+          //       path: ':announcementUid',
+          //       name: AnnouncementDetailPage.routerName,
+          //       builder: (context, state) => AnnouncementDetailPage(
+          //         announcementModel:
+          //             (state.extra as Map<String, dynamic>)["announcement"],
+          //       ),
+          //     )
+          //   ],
+          // ),
 
-      //     GoRoute(
-      //       path: 'inquire',
-      //       name: InquirePage.routerName,
-      //       builder: (context, state) => const InquirePage(),
-      //     )
-      //   ],
-      // ),
+          GoRoute(
+            path: 'inquire',
+            name: InquirePage.routerName,
+            builder: (context, state) => const InquirePage(),
+          )
+        ],
+      ),
       // GoRoute(
       //   path: pathEdit,
       //   name: MyProfileEditPage.routerName,

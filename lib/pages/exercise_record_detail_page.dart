@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
 
 import 'package:climb/database/database.dart';
 import 'package:climb/database_services/exercise_record_service.dart';
 import 'package:climb/database_services/video_service.dart';
+import 'package:climb/pages/exercise_records_page.dart';
 import 'package:climb/providers/app_directory_provider.dart';
 import 'package:climb/styles/app_colors.dart';
 import 'package:climb/utils/get_file_size.dart';
@@ -11,13 +13,13 @@ import 'package:climb/widgets/bottom_tool_bar.dart';
 import 'package:climb/widgets/buttons/app_bar_text_button.dart';
 import 'package:climb/widgets/dialogs/confirmation_dialog.dart';
 import 'package:climb/widgets/grid_views/video_thumbnails_grid_view.dart';
+import 'package:climb/widgets/title_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
-enum SelectType { total, success, fail }
 
 class ExerciseRecordDetailPage extends StatefulWidget {
   static String routerName = 'ExerciseRecordDetail';
@@ -36,19 +38,22 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
   late AppDirectoryProvider _appDirectoryProvider;
 
   ExerciseRecord? _exerciseRecord;
-  List<Video> _videos = [];
+  List<VideoWithJoin> _videoWithJoins = [];
   List<Video> _filteredVideos = [];
   HashSet<Video> _selectedVideos = HashSet<Video>();
 
   bool _isMultiSelectionEnabled = false;
   bool _isLoading = false;
   int _progressCount = 0;
-  SelectType _selectType = SelectType.total;
+  bool? _isSuccess;
+  List<Difficulty> _difficulties = [];
+  final List<Difficulty> _selectedDifficulties = [];
 
   List<File> _thumbnails = [];
   List<File> _filteredThumbnails = [];
 
   late Stream<ExerciseRecordWithJoin> _exerciseRecordWithJoinStream;
+  late StreamSubscription _exerciseRecordWithJoinSubscription;
 
   _activateMultiSelection() {
     setState(() {
@@ -72,7 +77,8 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
 
     _exerciseRecordWithJoinStream = _exerciseRecordModel
         .watchExerciseRecordWithJoin(widget.exerciseRecordId);
-    _exerciseRecordWithJoinStream.listen((exerciseRecordWithJoin) {
+    _exerciseRecordWithJoinSubscription =
+        _exerciseRecordWithJoinStream.listen((exerciseRecordWithJoin) {
       _exerciseRecord = exerciseRecordWithJoin.exerciseRecord;
       _loadVideos();
     });
@@ -87,15 +93,23 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
     if (_exerciseRecord == null) {
       return;
     }
-    _videos = await _videoService.getVideosByExerciseRecordId(
+    _videoWithJoins = await _videoService.getVideosByExerciseRecordId(
         exerciseRecordId: _exerciseRecord!.id);
     _thumbnails = [];
-    for (int i = 0; i < _videos.length; i++) {
+    for (int i = 0; i < _videoWithJoins.length; i++) {
       var thumbnail = _appDirectoryProvider.getVideoThumbnail(
-          fileName: _videos[i].fileName, videoId: _videos[i].id);
+          fileName: _videoWithJoins[i].video.fileName,
+          videoId: _videoWithJoins[i].video.id);
       _thumbnails.add(thumbnail);
     }
-    filterVideosBySelectType();
+
+    // 난이도 얻기
+    _difficulties = _videoWithJoins
+        .map((videoWithJoin) => videoWithJoin.difficulty!)
+        .toSet()
+        .toList();
+
+    _filterVideos();
     if (mounted) {
       setState(
         () {},
@@ -135,6 +149,7 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -143,73 +158,56 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Wrap(
-                            spacing: 12,
-                            children: List<Widget>.of(
-                              [
-                                ChoiceChip(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  selectedColor: colorOrange,
-                                  side: BorderSide.none,
-                                  label: Text(
-                                    '성공',
-                                    style: _selectType == SelectType.success
-                                        ? Theme.of(context)
-                                            .textTheme
-                                            .titleMedium
-                                        : Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                  ),
-                                  selected: _selectType == SelectType.success,
-                                  onSelected: (bool selected) {
-                                    setState(
-                                      () {
-                                        _selectType = selected
-                                            ? SelectType.success
-                                            : SelectType.total;
-                                      },
-                                    );
-                                    filterVideosBySelectType();
+                      Wrap(
+                        spacing: 12,
+                        children: List<Widget>.of(
+                          [
+                            ChoiceChip(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              selectedColor: colorOrange,
+                              side: BorderSide.none,
+                              label: Text(
+                                '성공',
+                                style: _isSuccess != null && _isSuccess!
+                                    ? Theme.of(context).textTheme.titleMedium
+                                    : Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              selected: _isSuccess != null && _isSuccess!,
+                              onSelected: (bool selected) {
+                                setState(
+                                  () {
+                                    _isSuccess = selected ? true : null;
                                   },
-                                ),
-                                ChoiceChip(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  selectedColor: colorGray,
-                                  side: BorderSide.none,
-                                  label: Text(
-                                    '실패',
-                                    style: _selectType == SelectType.fail
-                                        ? Theme.of(context)
-                                            .textTheme
-                                            .titleMedium
-                                        : Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                  ),
-                                  selected: _selectType == SelectType.fail,
-                                  onSelected: (bool selected) {
-                                    setState(
-                                      () {
-                                        _selectType = selected
-                                            ? SelectType.fail
-                                            : SelectType.total;
-                                      },
-                                    );
-                                    filterVideosBySelectType();
+                                );
+                                _filterVideos();
+                              },
+                            ),
+                            ChoiceChip(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              selectedColor: colorGray,
+                              side: BorderSide.none,
+                              label: Text(
+                                '실패',
+                                style: _isSuccess != null && !_isSuccess!
+                                    ? Theme.of(context).textTheme.titleMedium
+                                    : Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              selected: _isSuccess != null && !_isSuccess!,
+                              onSelected: (bool selected) {
+                                setState(
+                                  () {
+                                    _isSuccess = selected ? false : null;
                                   },
-                                ),
-                              ],
-                            ).toList(),
-                          ),
-                        ],
+                                );
+                                _filterVideos();
+                              },
+                            ),
+                          ],
+                        ).toList(),
                       ),
                       _isMultiSelectionEnabled
                           ? Text(
@@ -220,6 +218,48 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
                     ],
                   ),
                 ),
+                const TitleDivider(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  child: Wrap(
+                    spacing: 12,
+                    children: List<Widget>.generate(
+                      _difficulties.length,
+                      (idx) {
+                        bool isSelected = _selectedDifficulties.contains(
+                          _difficulties[idx],
+                        );
+
+                        return ChoiceChip(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          selectedColor: colorOrange,
+                          side: BorderSide.none,
+                          label: Text(
+                            _difficulties[idx].name,
+                            style: isSelected
+                                ? Theme.of(context).textTheme.titleMedium
+                                : Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          selected: isSelected,
+                          onSelected: (bool selected) {
+                            if (selected) {
+                              _selectedDifficulties.add(_difficulties[idx]);
+                            } else {
+                              _selectedDifficulties.remove(_difficulties[idx]);
+                            }
+
+                            _filterVideos();
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                const Gap(8),
                 Expanded(
                   child: _filteredVideos.isNotEmpty
                       ? Padding(
@@ -227,11 +267,14 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
                           child: VideoThumbnailsGridView(
                             exerciseRecordId: widget.exerciseRecordId,
                             videoWithThumbnails: List.generate(
-                                _filteredThumbnails.length, (int idx) {
-                              return VideoWithThumbnail(
+                              _filteredThumbnails.length,
+                              (int idx) {
+                                return VideoWithThumbnail(
                                   video: _filteredVideos[idx],
-                                  thumbnail: _filteredThumbnails[idx]);
-                            }),
+                                  thumbnail: _filteredThumbnails[idx],
+                                );
+                              },
+                            ),
                             isMultiSelectionEnabled: _isMultiSelectionEnabled,
                             activateMultiSelection: _activateMultiSelection,
                             selectVideo: _selectVideo,
@@ -241,22 +284,28 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
                         )
                       : const SizedBox(),
                 ),
-                BottomToolBar(
-                  iconButtonDataList: [
-                    BottomToolBarIconButtonData(
-                      onPressed: _isMultiSelectionEnabled
-                          ? _onPressedDownloadToGallery
-                          : null,
-                      icon: const Icon(Icons.file_download_outlined),
-                    ),
-                    BottomToolBarIconButtonData(
-                      onPressed: _isMultiSelectionEnabled
-                          ? () => _onPressedDeleteButton(context)
-                          : null,
-                      icon: const Icon(Icons.delete_outlined),
-                    ),
-                  ],
-                ),
+                _isMultiSelectionEnabled
+                    ? BottomToolBar(
+                        iconButtonDataList: [
+                          BottomToolBarIconButtonData(
+                            onPressed: () =>
+                                _onPressedDownloadToGallery(context),
+                            icon: const Icon(Icons.file_download_outlined),
+                          ),
+                          BottomToolBarIconButtonData(
+                            onPressed: () => _onPressedVideoDelete(context),
+                            icon: const Icon(Icons.delete_outlined),
+                          ),
+                        ],
+                      )
+                    : BottomToolBar(
+                        iconButtonDataList: [
+                          BottomToolBarIconButtonData(
+                            onPressed: () => _onPressedDeleteButton(context),
+                            icon: const Icon(Icons.delete_outlined),
+                          ),
+                        ],
+                      ),
               ],
             ),
             Visibility(
@@ -297,27 +346,20 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
     );
   }
 
-  filterVideosBySelectType() {
+  _filterVideos() {
     _filteredVideos = [];
     _filteredThumbnails = [];
-    if (_selectType == SelectType.total) {
-      _filteredVideos = _videos;
-      _filteredThumbnails = _thumbnails;
-    } else if (_selectType == SelectType.success) {
-      for (int i = 0; i < _videos.length; i++) {
-        if (_videos[i].isSuccess) {
-          _filteredVideos.add(_videos[i]);
-          _filteredThumbnails.add(_thumbnails[i]);
-        }
-      }
-    } else if (_selectType == SelectType.fail) {
-      for (int i = 0; i < _videos.length; i++) {
-        if (!_videos[i].isSuccess) {
-          _filteredVideos.add(_videos[i]);
-          _filteredThumbnails.add(_thumbnails[i]);
-        }
+    for (int i = 0; i < _videoWithJoins.length; i++) {
+      var successFilterResult = (_isSuccess == null) ||
+          _videoWithJoins[i].video.isSuccess == _isSuccess;
+      var difficultiesFilterResult = (_selectedDifficulties.isEmpty) ||
+          _selectedDifficulties.contains(_videoWithJoins[i].difficulty);
+      if (successFilterResult && difficultiesFilterResult) {
+        _filteredVideos.add(_videoWithJoins[i].video);
+        _filteredThumbnails.add(_thumbnails[i]);
       }
     }
+
     setState(() {});
   }
 
@@ -342,7 +384,73 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
     return _selectedVideos.contains(video);
   }
 
-  _onPressedDownloadToGallery() async {
+  _onPressedDeleteButton(BuildContext context) async {
+    try {
+      // 비디오 및 썸네일 파일 크기 계산
+      var totalBytes = 0;
+      List<VideoData> videosForDelete = [];
+      for (var videoWithJoin in _videoWithJoins.toList()) {
+        var video = videoWithJoin.video;
+        var videoFile = _appDirectoryProvider.getVideoFile(
+          video.fileName,
+        );
+        var thumbnailFile = _appDirectoryProvider.getVideoThumbnail(
+          fileName: video.fileName,
+          videoId: video.id,
+        );
+        videosForDelete.add(
+          VideoData(
+            video: video,
+            videoFile: videoFile,
+            videoThumbnail: thumbnailFile,
+          ),
+        );
+        totalBytes += videoFile.lengthSync() + thumbnailFile.lengthSync();
+      }
+      if (!mounted) {
+        return;
+      }
+
+      final isConfirmed = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) => ConfirmationDialog(
+          mainText: '운동 기록을 삭제 할까요?',
+          subText:
+              '삭제하면 현재 운동 기록과\n 기록 내 영상 ${formatBytesToMegaBytes(totalBytes)}가 삭제돼요.',
+          cancelText: '취소',
+          confirmText: '삭제',
+        ),
+      );
+      if (isConfirmed ?? false) {
+        setState(() {
+          _isLoading = true;
+          _progressCount = 0;
+        });
+        await Future.wait(videosForDelete.map((videoData) async {
+          await Future.wait([
+            videoData.videoFile.delete(),
+            videoData.videoThumbnail.delete(),
+            _videoService.deleteVideo(videoData.video.id),
+          ]);
+          setState(() {
+            _progressCount++;
+          });
+        }));
+
+        await _exerciseRecordWithJoinSubscription.cancel();
+        await _exerciseRecordModel
+            .deleteExerciseRecord(widget.exerciseRecordId);
+        _isLoading = false;
+        if (context.mounted) {
+          context.goNamed(ExerciseRecordsPage.routerName);
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  _onPressedDownloadToGallery(BuildContext context) async {
     final isConfirmed = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) => const ConfirmationDialog(
@@ -370,7 +478,7 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
     }
   }
 
-  _onPressedDeleteButton(BuildContext context) async {
+  _onPressedVideoDelete(BuildContext context) async {
     try {
       // 비디오 및 썸네일 파일 크기 계산
       var totalBytes = 0;
@@ -399,7 +507,7 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
       final isConfirmed = await showDialog<bool>(
         context: context,
         builder: (BuildContext context) => ConfirmationDialog(
-          mainText: '삭제 할까요?',
+          mainText: '선택한 영상들을 삭제 할까요?',
           subText:
               '삭제한 영상들은 영구적으로 삭제돼요.\n${formatBytesToMegaBytes(totalBytes)}가 삭제돼요.',
           cancelText: '취소',

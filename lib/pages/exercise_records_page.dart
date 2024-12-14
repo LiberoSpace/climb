@@ -1,6 +1,8 @@
 import 'package:climb/database_services/exercise_record_service.dart';
+import 'package:climb/pages/settings_page.dart';
 import 'package:climb/widgets/grid_views/exercise_record_grid_view.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseRecordsPage extends StatefulWidget {
@@ -24,6 +26,14 @@ class _ExerciseRecordsPageState extends State<ExerciseRecordsPage> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         forceMaterialTransparency: true,
+        actions: [
+          IconButton(
+            onPressed: () => context.pushNamed(SettingsPage.routerName),
+            icon: const Icon(
+              Icons.settings_outlined,
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Padding(

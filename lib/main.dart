@@ -31,7 +31,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   const env = String.fromEnvironment('FLUTTER_APP_FLAVOR');
-  print(env);
 
   LicenseRegistry.addLicense(() async* {
     final license = await rootBundle.loadString('assets/google_fonts/OFL.txt');
@@ -39,9 +38,13 @@ Future<void> main() async {
   });
 
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  if (env.contains('-prod')) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } else {
+    await Firebase.initializeApp();
+  }
 
   // font
   GoogleFonts.config.allowRuntimeFetching = false;

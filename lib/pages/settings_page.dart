@@ -47,13 +47,13 @@ class _SettingsPageState extends State<SettingsPage> {
           const MiddleTitleBar(
             title: '안내',
           ),
-          ContentTitleBar(
-            onTapBar: () => context.pushNamed(AnnouncementsPage.routerName),
-            title: '공지사항',
-            tail: const Icon(
-              Icons.arrow_forward_ios_outlined,
-            ),
-          ),
+          // ContentTitleBar(
+          //   onTapBar: () => context.pushNamed(AnnouncementsPage.routerName),
+          //   title: '공지사항',
+          //   tail: const Icon(
+          //     Icons.arrow_forward_ios_outlined,
+          //   ),
+          // ),
           ContentTitleBar(
             onTapBar: () => context.pushNamed(
               InquirePage.routerName,
@@ -96,10 +96,10 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             ),
           ),
-          const TitleDivider(),
-          const MiddleTitleBar(
-            title: '사용자 설정',
-          ),
+          // const TitleDivider(),
+          // const MiddleTitleBar(
+          //   title: '사용자 설정',
+          // ),
           // ContentTitleBar(
           //   onTapBar: () => context.pushNamed(AccountInfoPage.routerName),
           //   title: '계정 정보',
