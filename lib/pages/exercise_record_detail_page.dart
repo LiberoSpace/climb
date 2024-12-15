@@ -218,7 +218,10 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
                     ],
                   ),
                 ),
-                const TitleDivider(),
+                const Divider(
+                  height: 4,
+                  color: colorLightGrayE2,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -236,7 +239,8 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           ),
-                          selectedColor: colorOrange,
+                          selectedColor:
+                              Theme.of(context).scaffoldBackgroundColor,
                           side: BorderSide.none,
                           label: Text(
                             _difficulties[idx].name,
