@@ -40,18 +40,30 @@ class _LocationListViewState extends State<LocationListView> {
     _exerciseRecordModel = context.read<ExerciseRecordModel>();
     _locationService = context.read<LocationService>();
 
-    getRecentLocations();
+    getRecentLocations().then((_) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
   @override
-  void didUpdateWidget(covariant LocationListView oldWidget) async {
+  void didUpdateWidget(covariant LocationListView oldWidget) {
     super.didUpdateWidget(oldWidget);
     _isRecentRecord = (widget.word == null || widget.word == "") ? true : false;
 
     if (_isRecentRecord) {
-      getRecentLocations();
+      getRecentLocations().then((_) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
     } else {
-      await getLocations();
+      getLocations().then((_) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
     }
   }
 
@@ -161,33 +173,30 @@ class _LocationListViewState extends State<LocationListView> {
     );
   }
 
-  void getRecentLocations() {
+  Future<void> getRecentLocations() async {
     _locationNames = <String>[];
     _locationUids = <String>[];
     _locationIds = <int>[];
 
     // 최근 암장 방문 기록에서 암장 가져오기
-    _exerciseRecordModel.getExerciseRecords().then((exerciseRecords) async {
-      if (exerciseRecords.isNotEmpty) {
-        _isRecentRecord = true;
-        for (var element in exerciseRecords) {
-          if (!_locationIds.contains(element.location.id)) {
-            _locationNames.add(element.location.locationName);
-            _locationIds.add(element.location.id);
-            _locationUids.add(element.location.locationUid);
-            if (mounted) {
-              setState(() {});
-            }
+    var exerciseRecords = await _exerciseRecordModel.getExerciseRecords();
+
+    if (exerciseRecords.isNotEmpty) {
+      _isRecentRecord = true;
+      for (var element in exerciseRecords) {
+        if (!_locationIds.contains(element.location.id)) {
+          _locationNames.add(element.location.locationName);
+          _locationIds.add(element.location.id);
+          _locationUids.add(element.location.locationUid);
+          if (mounted) {
+            setState(() {});
           }
         }
-      } else {
-        _isRecentRecord = false;
-        await getLocations(isAll: true);
-        if (mounted) {
-          setState(() {});
-        }
       }
-    });
+    } else {
+      _isRecentRecord = false;
+      await getLocations(isAll: true);
+    }
   }
 
   Future<void> getLocations({bool isAll = false}) async {
