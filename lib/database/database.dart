@@ -47,7 +47,7 @@ class AppDatabase extends _$AppDatabase {
         int locId;
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_gangnam',
+            locationUid: 'theClimb_gangnam',
             locationName: '더클라임 강남',
           ),
         );
@@ -110,7 +110,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -119,7 +119,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
@@ -144,7 +144,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_nonhyeon',
+            locationUid: 'theClimb_nonhyeon',
             locationName: '더클라임 논현',
           ),
         );
@@ -208,7 +208,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -217,7 +217,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
@@ -242,7 +242,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_magok',
+            locationUid: 'theClimb_magok',
             locationName: '더클라임 마곡',
           ),
         );
@@ -306,7 +306,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -315,7 +315,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
@@ -340,7 +340,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_mullae',
+            locationUid: 'theClimb_mullae',
             locationName: '더클라임 문래',
           ),
         );
@@ -404,7 +404,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -413,7 +413,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
@@ -438,7 +438,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_sadang',
+            locationUid: 'theClimb_sadang',
             locationName: '더클라임 사당',
           ),
         );
@@ -502,7 +502,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -511,7 +511,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
@@ -536,7 +536,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_seouldae',
+            locationUid: 'theClimb_seouldae',
             locationName: '더클라임 서울대',
           ),
         );
@@ -600,7 +600,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -609,7 +609,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
@@ -634,7 +634,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_sillim',
+            locationUid: 'theClimb_sillim',
             locationName: '더클라임 신림',
           ),
         );
@@ -698,7 +698,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -707,7 +707,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
@@ -732,7 +732,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_sinsa',
+            locationUid: 'theClimb_sinsa',
             locationName: '더클라임 신사',
           ),
         );
@@ -796,7 +796,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -805,7 +805,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
@@ -830,7 +830,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_yangjae',
+            locationUid: 'theClimb_yangjae',
             locationName: '더클라임 양재',
           ),
         );
@@ -894,7 +894,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -903,7 +903,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
@@ -928,7 +928,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_yeonnam',
+            locationUid: 'theClimb_yeonnam',
             locationName: '더클라임 연남',
           ),
         );
@@ -992,7 +992,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -1001,7 +1001,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
@@ -1026,7 +1026,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_leesoo',
+            locationUid: 'theClimb_leesoo',
             locationName: '더클라임 이수',
           ),
         );
@@ -1090,7 +1090,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -1099,7 +1099,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
@@ -1124,7 +1124,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theclimb_ilsan',
+            locationUid: 'theClimb_ilsan',
             locationName: '더클라임 일산',
           ),
         );
@@ -1188,7 +1188,7 @@ class AppDatabase extends _$AppDatabase {
             name: '검정',
             colorValue: int.parse('0xFF000000'),
             uid: '1',
-            score: 1400,
+            score: 1600,
             location: locId,
           ),
         );
@@ -1197,7 +1197,7 @@ class AppDatabase extends _$AppDatabase {
             name: '갈색',
             colorValue: int.parse('0xFF8B4513'),
             uid: '1',
-            score: 1600,
+            score: 1400,
             location: locId,
           ),
         );
