@@ -47,7 +47,7 @@ class AppDatabase extends _$AppDatabase {
         int locId;
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_gangnam',
+            locationUid: 'theclimb_gangnam',
             locationName: '더클라임 강남',
           ),
         );
@@ -144,7 +144,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_nonhyeon',
+            locationUid: 'theclimb_nonhyeon',
             locationName: '더클라임 논현',
           ),
         );
@@ -242,7 +242,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_magok',
+            locationUid: 'theclimb_magok',
             locationName: '더클라임 마곡',
           ),
         );
@@ -340,7 +340,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_mullae',
+            locationUid: 'theclimb_mullae',
             locationName: '더클라임 문래',
           ),
         );
@@ -438,7 +438,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_sadang',
+            locationUid: 'theclimb_sadang',
             locationName: '더클라임 사당',
           ),
         );
@@ -536,7 +536,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_seouldae',
+            locationUid: 'theclimb_seouldae',
             locationName: '더클라임 서울대',
           ),
         );
@@ -634,7 +634,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_sillim',
+            locationUid: 'theclimb_sillim',
             locationName: '더클라임 신림',
           ),
         );
@@ -732,7 +732,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_sinsa',
+            locationUid: 'theclimb_sinsa',
             locationName: '더클라임 신사',
           ),
         );
@@ -830,7 +830,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_yangjae',
+            locationUid: 'theclimb_yangjae',
             locationName: '더클라임 양재',
           ),
         );
@@ -928,7 +928,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_yeonnam',
+            locationUid: 'theclimb_yeonnam',
             locationName: '더클라임 연남',
           ),
         );
@@ -1026,7 +1026,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_leesoo',
+            locationUid: 'theclimb_leesoo',
             locationName: '더클라임 이수',
           ),
         );
@@ -1124,7 +1124,7 @@ class AppDatabase extends _$AppDatabase {
 
         locId = await into(locations).insert(
           LocationsCompanion.insert(
-            locationUid: 'theClimb_ilsan',
+            locationUid: 'theclimb_ilsan',
             locationName: '더클라임 일산',
           ),
         );
@@ -1231,6 +1231,28 @@ class AppDatabase extends _$AppDatabase {
         },
       ),
       beforeOpen: (details) async {
+        var needChangeLocations = await (select(locations)
+              ..where((t) => t.locationUid.like('theClimb_%')))
+            .get();
+
+        await Future.wait(
+          needChangeLocations.map(
+            (location) async {
+              var newLocationUid =
+                  'theclimb_${location.locationUid.split('_')[1]}';
+              await (update(locations)
+                    ..where(
+                      (t) => t.id.equals(location.id),
+                    ))
+                  .write(
+                LocationsCompanion(
+                  locationUid: Value(newLocationUid),
+                ),
+              );
+            },
+          ),
+        );
+
         if (kDebugMode) {
           print('이전 버전: ${details.versionBefore}');
           print('이전 버전: ${details.versionNow}');

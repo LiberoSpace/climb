@@ -7,6 +7,7 @@ import 'package:climb/providers/user_auth_provider.dart';
 import 'package:climb/styles/app_colors.dart';
 import 'package:climb/utils/get_file_size.dart';
 import 'package:climb/widgets/grid_views/exercise_record_grid_view.dart';
+import 'package:drift_db_viewer/drift_db_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -70,6 +71,18 @@ class _ExerciseRecordsPageState extends State<ExerciseRecordsPage> {
               Icons.settings_outlined,
             ),
           ),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     Navigator.of(context).push(
+          //       MaterialPageRoute(
+          //         builder: (context) => DriftDbViewer(
+          //           _videoService.db,
+          //         ),
+          //       ),
+          //     );
+          //   },
+          //   child: const Text('DB viewer'),
+          // ),
         ],
       ),
       body: SafeArea(

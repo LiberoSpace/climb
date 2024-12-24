@@ -369,39 +369,40 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             children: [
               Expanded(
                 child: Stack(
+                  alignment: AlignmentDirectional.topCenter,
                   children: [
                     FutureBuilder<void>(
                       future: _initializeControllerFuture,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           return GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onScaleUpdate: (details) async {
-                                if (details.focalPointDelta.distanceSquared
-                                        .toDouble() <
-                                    0.01) {
-                                  return;
-                                }
+                            behavior: HitTestBehavior.translucent,
+                            onScaleUpdate: (details) async {
+                              if (details.focalPointDelta.distanceSquared
+                                      .toDouble() <
+                                  0.01) {
+                                return;
+                              }
 
-                                if (details.scale < 1) {
-                                  _currentZoomLevel *= (1 +
-                                      (details.scale - 1) * _zoomOutFactor);
-                                } else {
-                                  _currentZoomLevel *=
-                                      (1 + (details.scale - 1) * _zoomInFactor);
-                                }
+                              if (details.scale < 1) {
+                                _currentZoomLevel *=
+                                    (1 + (details.scale - 1) * _zoomOutFactor);
+                              } else {
+                                _currentZoomLevel *=
+                                    (1 + (details.scale - 1) * _zoomInFactor);
+                              }
 
-                                // 줌 범위에 맞게 값 제한
-                                _currentZoomLevel =
-                                    max(_currentZoomLevel, _minZoomLevel);
-                                _currentZoomLevel =
-                                    min(_currentZoomLevel, _maxZoomLevel);
+                              // 줌 범위에 맞게 값 제한
+                              _currentZoomLevel =
+                                  max(_currentZoomLevel, _minZoomLevel);
+                              _currentZoomLevel =
+                                  min(_currentZoomLevel, _maxZoomLevel);
 
-                                await _controller
-                                    .setZoomLevel(_currentZoomLevel);
-                                setState(() {});
-                              },
-                              child: CameraPreview(_controller));
+                              await _controller.setZoomLevel(_currentZoomLevel);
+                              setState(() {});
+                            },
+                            child: CameraPreview(_controller),
+                          );
                         } else {
                           return _exerciseRecord != null
                               ? Align(
