@@ -418,9 +418,9 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
       final isConfirmed = await showDialog<bool>(
         context: context,
         builder: (BuildContext context) => ConfirmationDialog(
-          mainText: '운동 기록을 삭제 할까요?',
+          mainText: '운동 기록을 삭제할까요?',
           subText:
-              '삭제하면 현재 운동 기록과\n 기록 내 영상 ${formatBytesToMegaBytes(totalBytes)}가 삭제돼요.',
+              '삭제하면 운동 기록과 영상들이 사라지고\n 영상 용량 ${formatBytesToMegaBytes(totalBytes)}가 확보돼요.',
           cancelText: '취소',
           confirmText: '삭제',
         ),
@@ -511,9 +511,9 @@ class _ExerciseRecordDetailPageState extends State<ExerciseRecordDetailPage> {
       final isConfirmed = await showDialog<bool>(
         context: context,
         builder: (BuildContext context) => ConfirmationDialog(
-          mainText: '선택한 영상들을 삭제 할까요?',
+          mainText: '선택한 영상들을 삭제할까요?',
           subText:
-              '삭제한 영상들은 영구적으로 삭제돼요.\n${formatBytesToMegaBytes(totalBytes)}가 삭제돼요.',
+              '삭제한 영상들은 영구적으로 사라져요.\n${formatBytesToMegaBytes(totalBytes)}가 확보돼요.',
           cancelText: '취소',
           confirmText: '삭제',
         ),
