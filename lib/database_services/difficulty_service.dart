@@ -22,40 +22,39 @@ class DifficultyService {
     }
   }
 
-  // TODO 나중에 여기 수정해야 함. 항상 isEmpty
   Future<Difficulty> getLatestDifficultyByExerciseRecordWithJoin(
       ExerciseRecordWithJoin exerciseRecordWithJoin) async {
     try {
-      var query = db.select(db.climbingProblems)
-        ..where(
-          (tbl) => tbl.exerciseRecord.equals(
-            exerciseRecordWithJoin.exerciseRecord.id,
+      var query = db.select(db.climbingProblems).join([
+        innerJoin(
+          db.difficulties,
+          db.difficulties.id.equalsExp(
+            db.climbingProblems.difficulty,
           ),
+        )
+      ])
+        ..where(
+          db.climbingProblems.exerciseRecord
+              .equals(exerciseRecordWithJoin.exerciseRecord.id),
         )
         ..orderBy(
           [
-            (t) => OrderingTerm(
-                  expression: t.createdAt,
-                  mode: OrderingMode.desc,
-                )
+            OrderingTerm(
+              expression: db.climbingProblems.createdAt,
+              mode: OrderingMode.desc,
+            ),
           ],
         )
         ..limit(1);
       var climbingProblems = await query.get();
 
       if (climbingProblems.isEmpty) {
-        // 가장 마지막 문제 존재하면 가져옴
         return (await getDifficulties(
           exerciseRecordWithJoin.location.id,
         ))[0];
       } else {
-        return await (db.select(db.difficulties)
-              ..where(
-                (tbl) => tbl.id.equals(
-                  climbingProblems[0].difficulty,
-                ),
-              ))
-            .getSingle();
+        // 가장 마지막 문제 존재하면 가져옴
+        return climbingProblems[0].readTable(db.difficulties);
       }
     } catch (e) {
       rethrow;
