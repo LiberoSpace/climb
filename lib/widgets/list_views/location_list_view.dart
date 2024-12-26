@@ -27,7 +27,7 @@ class _LocationListViewState extends State<LocationListView> {
   List<int> _locationIds = <int>[];
   List<String> _locationUids = <String>[];
 
-  bool _isRecentRecord = true;
+  bool _isRecentRecord = false;
   final storageRef = FirebaseStorage.instance.ref();
   late ExerciseRecordModel _exerciseRecordModel;
   late LocationService _locationService;
@@ -40,31 +40,42 @@ class _LocationListViewState extends State<LocationListView> {
     _exerciseRecordModel = context.read<ExerciseRecordModel>();
     _locationService = context.read<LocationService>();
 
-    getRecentLocations().then((_) {
+    getLocations(isAll: true).then((_) {
       if (mounted) {
         setState(() {});
       }
     });
+    // getRecentLocations().then((_) {
+    //   if (mounted) {
+    //     setState(() {});
+    //   }
+    // });
   }
 
   @override
   void didUpdateWidget(covariant LocationListView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _isRecentRecord = (widget.word == null || widget.word == "") ? true : false;
+    getLocations().then((_) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
 
-    if (_isRecentRecord) {
-      getRecentLocations().then((_) {
-        if (mounted) {
-          setState(() {});
-        }
-      });
-    } else {
-      getLocations().then((_) {
-        if (mounted) {
-          setState(() {});
-        }
-      });
-    }
+    // _isRecentRecord = (widget.word == null || widget.word == "") ? true : false;
+
+    // if (_isRecentRecord) {
+    //   getRecentLocations().then((_) {
+    //     if (mounted) {
+    //       setState(() {});
+    //     }
+    //   });
+    // } else {
+    //   getLocations().then((_) {
+    //     if (mounted) {
+    //       setState(() {});
+    //     }
+    //   });
+    // }
   }
 
   @override

@@ -445,7 +445,8 @@ class _VideoDetailPageState extends State<ExerciseRecordVideosDetailPage> {
         context: context,
         builder: (BuildContext context) => ConfirmationDialog(
           mainText: '이 동영상을 삭제할까요?',
-          subText: '삭제한 영상은 영구적으로 사라져요.\n${videoData.dataSizeString}가 확보돼요.',
+          subText:
+              '삭제한 영상은 영구적으로 사라져요.\n영상 용량 ${videoData.dataSizeString}가 확보돼요.',
           cancelText: '취소',
           confirmText: '삭제',
         ),
