@@ -26,8 +26,8 @@ class InquirePage extends StatelessWidget {
               ),
               child: MarkdownBody(
                 data: '''
-**안녕하세요. 클라임 타운입니다!**  
-**클라임 타운을 이용해 주셔서 감사합니다.**
+**안녕하세요. 클라임입니다!**  
+**클라임을 이용해 주셔서 감사합니다.**
 ㅤ
 ㅤ
 ㅤ
