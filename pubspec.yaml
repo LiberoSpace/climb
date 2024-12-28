@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.21+21
+version: 1.0.22+22
 
 environment:
   sdk: ^3.5.0
@@ -133,3 +133,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+scripts:
+  build:
+    android: flutter build appbundle --flavor release-prod --obfuscate --split-debug-info=./obfuscate_debug/android
+    ios: flutter build ipa --flavor release-prod --obfuscate --split-debug-info=./obfuscate_debug/ios
+  upload-symbols: firebase crashlytics:symbols:upload --app=1:772573940472:android:8dbc6727d0382fd68a890d ./obfuscate_debug/android

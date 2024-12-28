@@ -63,7 +63,6 @@ Future<void> main() async {
       appleProvider: AppleProvider.debug,
     );
   } else {
-    print('release mode');
     await FirebaseAppCheck.instance.activate();
 
     FlutterError.onError = (errorDetails) {
