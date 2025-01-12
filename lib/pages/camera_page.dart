@@ -9,6 +9,7 @@ import 'package:climb/database_services/climbing_problem_service.dart';
 import 'package:climb/database_services/difficulty_service.dart';
 import 'package:climb/database_services/exercise_record_service.dart';
 import 'package:climb/database_services/video_service.dart';
+import 'package:climb/pages/error_page.dart';
 import 'package:climb/pages/exercise_record_detail_page.dart';
 import 'package:climb/pages/exercise_records_page.dart';
 import 'package:climb/providers/app_directory_provider.dart';
@@ -91,7 +92,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     _resolution = _userAuthProvider.cameraResolution;
 
     if (_cameraProvider.mainCamera == null) {
-      context.pop();
+      context.goNamed(ErrorPage.routerName);
       return;
     }
     _mainCamera = _cameraProvider.mainCamera!;
