@@ -19,6 +19,7 @@ import 'package:climb/styles/app_colors.dart';
 import 'package:climb/utils/get_file_size.dart';
 import 'package:climb/widgets/dialogs/confirmation_dialog.dart';
 import 'package:climb/widgets/dialogs/location_search_dialog.dart';
+import 'package:climb/widgets/dialogs/onboarding_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -105,6 +106,21 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     // Next, initialize the controller. This returns a Future.
 
     selectLocation();
+  }
+
+  late bool isCameraOnboardingFinished;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    isCameraOnboardingFinished = _userAuthProvider.isCameraOnboardingFinished;
+    // Build 이후 첫 프레임에 Dialog 실행
+    if (!isCameraOnboardingFinished) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _cameraOnboarding();
+      });
+    }
   }
 
   @override
@@ -1277,5 +1293,28 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     WakelockPlus.disable();
     super.dispose();
+  }
+
+  void _cameraOnboarding() async {
+    await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) => OnboardingDialog(
+        widget: Image.asset(
+          'assets/images/camera_onboarding_1.png',
+        ),
+      ),
+    );
+    if (!mounted) return;
+    await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) => OnboardingDialog(
+        widget: Image.asset(
+          'assets/images/camera_onboarding_2.png',
+        ),
+      ),
+    );
+    if (!mounted) return;
+    await _userAuthProvider.setIsCameraOnboardingFinished(true);
+    isCameraOnboardingFinished = true; // Dialog를 한 번만 표시하도록 설정
   }
 }

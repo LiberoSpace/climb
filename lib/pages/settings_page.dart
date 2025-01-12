@@ -1,13 +1,9 @@
 import 'dart:io';
 
-import 'package:climb/constants/config.dart';
-import 'package:climb/pages/account_info_page.dart';
-import 'package:climb/pages/announcements_page.dart';
 import 'package:climb/pages/inquire_page.dart';
-import 'package:climb/styles/app_colors.dart';
+import 'package:climb/widgets/dialogs/onboarding_dialog.dart';
 import 'package:climb/widgets/title_divider.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,6 +50,10 @@ class _SettingsPageState extends State<SettingsPage> {
           //     Icons.arrow_forward_ios_outlined,
           //   ),
           // ),
+          ContentTitleBar(
+            onTapBar: () => _cameraOnboarding(),
+            title: '카메라 설명 다시보기',
+          ),
           ContentTitleBar(
             onTapBar: () => context.pushNamed(
               InquirePage.routerName,
@@ -138,6 +138,26 @@ class _SettingsPageState extends State<SettingsPage> {
     )) {
       throw Exception('Could not launch $url');
     }
+  }
+
+  void _cameraOnboarding() async {
+    await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) => OnboardingDialog(
+        widget: Image.asset(
+          'assets/images/camera_onboarding_1.png',
+        ),
+      ),
+    );
+    if (!mounted) return;
+    await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) => OnboardingDialog(
+        widget: Image.asset(
+          'assets/images/camera_onboarding_2.png',
+        ),
+      ),
+    );
   }
 }
 

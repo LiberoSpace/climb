@@ -12,6 +12,13 @@ enum AuthPlatForm { google, kakao, apple, email }
 
 enum SignInResult { fail, signIn, signUp }
 
+enum PrefsKey {
+  totalVideoCount,
+  totalContentSizeMb,
+  resolution,
+  isCameraOnboardingFinished
+}
+
 class UserAuthProvider extends ChangeNotifier {
   final FirebaseAuth auth;
   final SharedPreferences prefs;
@@ -22,15 +29,10 @@ class UserAuthProvider extends ChangeNotifier {
   late int totalVideoCount;
   late int totalContentSizeMb;
   late ResolutionPreset cameraResolution;
+  late bool isCameraOnboardingFinished;
 
   User? _user;
   User? get user => _user;
-
-  // AppUser? _appUser;
-  // AppUser? get appUser => _appUser;
-
-  // UserProfile? _userProfile;
-  // UserProfile? get userProfile => _userProfile;
 
   UserAuthProvider({
     required this.auth,
@@ -39,11 +41,14 @@ class UserAuthProvider extends ChangeNotifier {
     required this.firebaseStorage,
     required this.appDocDir,
   }) {
-    totalVideoCount = prefs.getInt('totalVideoCount') ?? 0;
-    totalContentSizeMb = prefs.getInt('totalContentSizeMb') ?? 0;
-    cameraResolution = prefs.getInt('resolution') != null
-        ? ResolutionPreset.values[prefs.getInt('resolution')!]
+    totalVideoCount = prefs.getInt(PrefsKey.totalVideoCount.toString()) ?? 0;
+    totalContentSizeMb =
+        prefs.getInt(PrefsKey.totalContentSizeMb.toString()) ?? 0;
+    cameraResolution = prefs.getInt(PrefsKey.resolution.toString()) != null
+        ? ResolutionPreset.values[prefs.getInt(PrefsKey.resolution.toString())!]
         : ResolutionPreset.veryHigh;
+    isCameraOnboardingFinished =
+        prefs.getBool(PrefsKey.isCameraOnboardingFinished.toString()) ?? false;
 
     // auth.authStateChanges().listen((User? user) {
     //   _user = user;
@@ -54,6 +59,51 @@ class UserAuthProvider extends ChangeNotifier {
     //   notifyListeners();
     // });
   }
+
+  updateVideoCountAndTotalSize(int videoDataSizeMB) async {
+    try {
+      var count = prefs.getInt(PrefsKey.totalVideoCount.toString()) ??
+          0; // 처음 사용 시 기본값 0
+      var sizeMb = prefs.getInt(PrefsKey.totalContentSizeMb.toString()) ??
+          0; // 처음 사용 시 기본값 0
+
+      await Future.wait([
+        prefs.setInt(PrefsKey.totalVideoCount.toString(), count + 1),
+        prefs.setInt(
+            PrefsKey.totalContentSizeMb.toString(), sizeMb + videoDataSizeMB),
+      ]);
+
+      totalVideoCount = prefs.getInt(PrefsKey.totalVideoCount.toString()) ?? 0;
+      totalContentSizeMb =
+          prefs.getInt(PrefsKey.totalContentSizeMb.toString()) ?? 0;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  updateResolution(ResolutionPreset resolutionPreset) async {
+    try {
+      await prefs.setInt(
+          PrefsKey.resolution.toString(), resolutionPreset.index);
+      cameraResolution = resolutionPreset;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  setIsCameraOnboardingFinished(bool value) async {
+    await prefs.setBool(PrefsKey.isCameraOnboardingFinished.toString(), value);
+    isCameraOnboardingFinished = value;
+    notifyListeners();
+  }
+
+  // AppUser? _appUser;
+  // AppUser? get appUser => _appUser;
+
+  // UserProfile? _userProfile;
+  // UserProfile? get userProfile => _userProfile;
 
   // Future<int> handleSignIn(AuthPlatForm authPlatForm) async {
   //   late UserCredential userCredential;
@@ -332,34 +382,6 @@ class UserAuthProvider extends ChangeNotifier {
   //     rethrow;
   //   }
   // }
-
-  updateVideoCountAndTotalSize(int videoDataSizeMB) async {
-    try {
-      var count = prefs.getInt('totalVideoCount') ?? 0; // 처음 사용 시 기본값 0
-      var sizeMb = prefs.getInt('totalContentSizeMb') ?? 0; // 처음 사용 시 기본값 0
-
-      await Future.wait([
-        prefs.setInt('totalVideoCount', count + 1),
-        prefs.setInt('totalContentSizeMb', sizeMb + videoDataSizeMB),
-      ]);
-
-      totalVideoCount = prefs.getInt('totalVideoCount') ?? 0;
-      totalContentSizeMb = prefs.getInt('totalContentSizeMb') ?? 0;
-      notifyListeners();
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  updateResolution(ResolutionPreset resolutionPreset) async {
-    try {
-      await prefs.setInt('resolution', resolutionPreset.index);
-      cameraResolution = resolutionPreset;
-      notifyListeners();
-    } catch (e) {
-      rethrow;
-    }
-  }
 
   // Future<UserCredential> signInWithKakao() async {}
   // Future<UserCredential> signInWithApple() async {}
