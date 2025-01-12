@@ -545,8 +545,162 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                         padding: const EdgeInsets.symmetric(horizontal: 28),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                _climbingProblem != null
+                                    ? Container(
+                                        width: 132,
+                                        height: 120,
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color:
+                                              colorLightGray.withOpacity(0.15),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '현재 문제',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium!
+                                                  .copyWith(color: colorWhite),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  '난이도:',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                          color: colorWhite),
+                                                ),
+                                                Container(
+                                                  width: 52,
+                                                  height: 20,
+                                                  decoration: BoxDecoration(
+                                                    color: _difficulty != null
+                                                        ? Color(_difficulty!
+                                                            .colorValue)
+                                                        : Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  '시도:',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                          color: colorWhite),
+                                                ),
+                                                Text(
+                                                  _climbingProblem != null
+                                                      ? _climbingProblem!
+                                                          .trialCount
+                                                          .toString()
+                                                      : '0',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                          color: colorWhite),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Container(
+                                        width: 132,
+                                        height: 120,
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color:
+                                              colorLightGray.withOpacity(0.15),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () => setDifficulty(-1),
+                                              child: const Icon(
+                                                Icons
+                                                    .keyboard_arrow_up_outlined,
+                                                size: 20,
+                                                weight: 1500,
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  '난이도:',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                          color: colorWhite),
+                                                ),
+                                                Container(
+                                                  width: 52,
+                                                  height: 20,
+                                                  decoration: BoxDecoration(
+                                                    color: _difficulty != null
+                                                        ? Color(_difficulty!
+                                                            .colorValue)
+                                                        : Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            GestureDetector(
+                                              onTap: () => setDifficulty(1),
+                                              child: const Icon(
+                                                Icons
+                                                    .keyboard_arrow_down_outlined,
+                                                size: 20,
+                                                weight: 1500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                              ],
+                            ),
+                            const Gap(
+                              12,
+                            ),
                             if (Platform.isIOS)
                               Container(
                                 decoration: BoxDecoration(
@@ -721,79 +875,6 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                 ),
                               ),
                             const Gap(12),
-                            SizedBox(
-                              height: 40,
-                              child: _controller.value.isRecordingVideo
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const SizedBox(),
-                                        SvgPicture.asset(
-                                          'assets/icons/tape.svg',
-                                          height: 24,
-                                          colorFilter: ColorFilter.mode(
-                                              _difficulty != null
-                                                  ? Color(
-                                                      _difficulty!.colorValue)
-                                                  : Colors.white,
-                                              BlendMode.srcIn),
-                                        ),
-                                      ],
-                                    )
-                                  : Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          _climbingProblem != null
-                                              ? '시도 횟수 ${_climbingProblem!.trialCount}'
-                                              : '시도 횟수 0',
-                                          style: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            if (_climbingProblem == null)
-                                              IconButton(
-                                                onPressed: () =>
-                                                    setDifficulty(-1),
-                                                icon: const Icon(
-                                                  Icons.remove,
-                                                  size: 20,
-                                                  weight: 1500,
-                                                ),
-                                              ),
-                                            SvgPicture.asset(
-                                              'assets/icons/tape.svg',
-                                              height: 24,
-                                              colorFilter: ColorFilter.mode(
-                                                  _difficulty != null
-                                                      ? Color(_difficulty!
-                                                          .colorValue)
-                                                      : Colors.white,
-                                                  BlendMode.srcIn),
-                                            ),
-                                            if (_climbingProblem == null)
-                                              IconButton(
-                                                onPressed: () =>
-                                                    setDifficulty(1),
-                                                icon: const Icon(
-                                                  Icons.add,
-                                                  size: 20,
-                                                  weight: 1500,
-                                                ),
-                                              ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                            ),
-                            const Gap(
-                              12,
-                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -939,41 +1020,47 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                           ),
                                         ),
                                       )
-                                    : GestureDetector(
-                                        onTap: () async {
-                                          final isConfirmed =
-                                              await showDialog<bool>(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                const ConfirmationDialog(
-                                              mainText: '다른 문제를 푸실건가요?',
-                                              subText: '시도 횟수가 0으로 변경됩니다.',
-                                              cancelText: '취소',
-                                              confirmText: '포기',
+                                    : _climbingProblem != null
+                                        ? GestureDetector(
+                                            onTap: () async {
+                                              final isConfirmed =
+                                                  await showDialog<bool>(
+                                                context: context,
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    const ConfirmationDialog(
+                                                  mainText: '다른 문제를 푸실건가요?',
+                                                  subText: '시도 횟수가 0으로 변경됩니다.',
+                                                  cancelText: '취소',
+                                                  confirmText: '포기',
+                                                ),
+                                              );
+                                              if (isConfirmed ?? false) {
+                                                await _finishClimbingProblem(
+                                                    false, false);
+                                                if (mounted) {
+                                                  setState(() {});
+                                                }
+                                              }
+                                            },
+                                            child: Container(
+                                              width: 64,
+                                              height: 64,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                color: colorLightGray
+                                                    .withOpacity(0.15),
+                                              ),
+                                              child: Image.asset(
+                                                'assets/images/give_up.png',
+                                              ),
                                             ),
-                                          );
-                                          if (isConfirmed ?? false) {
-                                            await _finishClimbingProblem(
-                                                false, false);
-                                            if (mounted) {
-                                              setState(() {});
-                                            }
-                                          }
-                                        },
-                                        child: Container(
-                                          width: 64,
-                                          height: 64,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            color: colorLightGray
-                                                .withOpacity(0.15),
+                                          )
+                                        : const SizedBox(
+                                            width: 64,
+                                            height: 64,
                                           ),
-                                          child: Image.asset(
-                                            'assets/images/give_up.png',
-                                          ),
-                                        ),
-                                      ),
                               ],
                             ),
                             const SizedBox(
