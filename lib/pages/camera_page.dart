@@ -22,7 +22,6 @@ import 'package:climb/widgets/dialogs/location_search_dialog.dart';
 import 'package:climb/widgets/dialogs/onboarding_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -185,7 +184,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     try {
       await _controller.initialize();
     } catch (e) {
-      print(e);
+      rethrow;
     }
     await Future.wait(
       [
@@ -663,15 +662,37 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            GestureDetector(
-                                              onTap: () => setDifficulty(-1),
-                                              child: const Icon(
-                                                Icons
-                                                    .keyboard_arrow_up_outlined,
-                                                size: 20,
-                                                weight: 1500,
-                                              ),
-                                            ),
+                                            _difficulties != null &&
+                                                    _difficulties![
+                                                            _difficulties!
+                                                                    .length -
+                                                                1] ==
+                                                        _difficulty
+                                                ? const SizedBox(
+                                                    width: 36,
+                                                    height: 36,
+                                                  )
+                                                : SizedBox(
+                                                    width: 36,
+                                                    height: 36,
+                                                    child: IconButton(
+                                                      highlightColor: colorGray
+                                                          .withOpacity(0.32),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                        0,
+                                                      ),
+                                                      iconSize: 32,
+                                                      onPressed: () =>
+                                                          setDifficulty(1),
+                                                      icon: const Icon(
+                                                        Icons
+                                                            .keyboard_arrow_up_outlined,
+                                                        size: 36,
+                                                        weight: 1500,
+                                                      ),
+                                                    ),
+                                                  ),
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -690,8 +711,10 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                                   height: 20,
                                                   decoration: BoxDecoration(
                                                     color: _difficulty != null
-                                                        ? Color(_difficulty!
-                                                            .colorValue)
+                                                        ? Color(
+                                                            _difficulty!
+                                                                .colorValue,
+                                                          )
                                                         : Colors.white,
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -700,15 +723,33 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                                 )
                                               ],
                                             ),
-                                            GestureDetector(
-                                              onTap: () => setDifficulty(1),
-                                              child: const Icon(
-                                                Icons
-                                                    .keyboard_arrow_down_outlined,
-                                                size: 20,
-                                                weight: 1500,
-                                              ),
-                                            ),
+                                            _difficulties != null &&
+                                                    _difficulties![0] ==
+                                                        _difficulty
+                                                ? const SizedBox(
+                                                    width: 36,
+                                                    height: 36,
+                                                  )
+                                                : SizedBox(
+                                                    width: 36,
+                                                    height: 36,
+                                                    child: IconButton(
+                                                      highlightColor: colorGray
+                                                          .withOpacity(0.32),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                        0,
+                                                      ),
+                                                      onPressed: () =>
+                                                          setDifficulty(-1),
+                                                      icon: const Icon(
+                                                        Icons
+                                                            .keyboard_arrow_down_outlined,
+                                                        size: 36,
+                                                        weight: 1500,
+                                                      ),
+                                                    ),
+                                                  ),
                                           ],
                                         ),
                                       ),
@@ -1172,7 +1213,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     await _userAuthProvider.updateVideoCountAndTotalSize(videoDataSize);
 
     var fileName = DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
-    var savedPath = await saveVideo(xFile, fileName);
+    await saveVideo(xFile, fileName);
 
     // 파일 삭제
     var file = File(xFile.path);
@@ -1250,8 +1291,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       });
     } on CameraException catch (e) {
       _showCameraException(e);
-      print(e);
-      return;
+      rethrow;
     }
   }
 
@@ -1283,7 +1323,8 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   }
 
   void _logError(String code, String? message) {
-    print('Error: $code${message == null ? '' : '\nError Message: $message'}');
+    debugPrint(
+        'Error: $code${message == null ? '' : '\nError Message: $message'}');
   }
 
   @override
