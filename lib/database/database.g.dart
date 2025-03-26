@@ -665,11 +665,6 @@ class $DifficultiesTable extends Difficulties
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _uidMeta = const VerificationMeta('uid');
-  @override
-  late final GeneratedColumn<String> uid = GeneratedColumn<String>(
-      'uid', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -722,17 +717,8 @@ class $DifficultiesTable extends Difficulties
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES locations (id)'));
   @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        uid,
-        name,
-        colorValue,
-        score,
-        isActive,
-        createdAt,
-        updatedAt,
-        location
-      ];
+  List<GeneratedColumn> get $columns =>
+      [id, name, colorValue, score, isActive, createdAt, updatedAt, location];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -745,12 +731,6 @@ class $DifficultiesTable extends Difficulties
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('uid')) {
-      context.handle(
-          _uidMeta, uid.isAcceptableOrUnknown(data['uid']!, _uidMeta));
-    } else if (isInserting) {
-      context.missing(_uidMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -801,8 +781,6 @@ class $DifficultiesTable extends Difficulties
     return Difficulty(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      uid: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}uid'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       colorValue: attachedDatabase.typeMapping
@@ -828,7 +806,6 @@ class $DifficultiesTable extends Difficulties
 
 class Difficulty extends DataClass implements Insertable<Difficulty> {
   final int id;
-  final String uid;
   final String name;
   final int colorValue;
   final int score;
@@ -838,7 +815,6 @@ class Difficulty extends DataClass implements Insertable<Difficulty> {
   final int location;
   const Difficulty(
       {required this.id,
-      required this.uid,
       required this.name,
       required this.colorValue,
       required this.score,
@@ -850,7 +826,6 @@ class Difficulty extends DataClass implements Insertable<Difficulty> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['uid'] = Variable<String>(uid);
     map['name'] = Variable<String>(name);
     map['color_value'] = Variable<int>(colorValue);
     map['score'] = Variable<int>(score);
@@ -864,7 +839,6 @@ class Difficulty extends DataClass implements Insertable<Difficulty> {
   DifficultiesCompanion toCompanion(bool nullToAbsent) {
     return DifficultiesCompanion(
       id: Value(id),
-      uid: Value(uid),
       name: Value(name),
       colorValue: Value(colorValue),
       score: Value(score),
@@ -880,7 +854,6 @@ class Difficulty extends DataClass implements Insertable<Difficulty> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Difficulty(
       id: serializer.fromJson<int>(json['id']),
-      uid: serializer.fromJson<String>(json['uid']),
       name: serializer.fromJson<String>(json['name']),
       colorValue: serializer.fromJson<int>(json['colorValue']),
       score: serializer.fromJson<int>(json['score']),
@@ -895,7 +868,6 @@ class Difficulty extends DataClass implements Insertable<Difficulty> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'uid': serializer.toJson<String>(uid),
       'name': serializer.toJson<String>(name),
       'colorValue': serializer.toJson<int>(colorValue),
       'score': serializer.toJson<int>(score),
@@ -908,7 +880,6 @@ class Difficulty extends DataClass implements Insertable<Difficulty> {
 
   Difficulty copyWith(
           {int? id,
-          String? uid,
           String? name,
           int? colorValue,
           int? score,
@@ -918,7 +889,6 @@ class Difficulty extends DataClass implements Insertable<Difficulty> {
           int? location}) =>
       Difficulty(
         id: id ?? this.id,
-        uid: uid ?? this.uid,
         name: name ?? this.name,
         colorValue: colorValue ?? this.colorValue,
         score: score ?? this.score,
@@ -930,7 +900,6 @@ class Difficulty extends DataClass implements Insertable<Difficulty> {
   Difficulty copyWithCompanion(DifficultiesCompanion data) {
     return Difficulty(
       id: data.id.present ? data.id.value : this.id,
-      uid: data.uid.present ? data.uid.value : this.uid,
       name: data.name.present ? data.name.value : this.name,
       colorValue:
           data.colorValue.present ? data.colorValue.value : this.colorValue,
@@ -946,7 +915,6 @@ class Difficulty extends DataClass implements Insertable<Difficulty> {
   String toString() {
     return (StringBuffer('Difficulty(')
           ..write('id: $id, ')
-          ..write('uid: $uid, ')
           ..write('name: $name, ')
           ..write('colorValue: $colorValue, ')
           ..write('score: $score, ')
@@ -959,14 +927,13 @@ class Difficulty extends DataClass implements Insertable<Difficulty> {
   }
 
   @override
-  int get hashCode => Object.hash(id, uid, name, colorValue, score, isActive,
-      createdAt, updatedAt, location);
+  int get hashCode => Object.hash(
+      id, name, colorValue, score, isActive, createdAt, updatedAt, location);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Difficulty &&
           other.id == this.id &&
-          other.uid == this.uid &&
           other.name == this.name &&
           other.colorValue == this.colorValue &&
           other.score == this.score &&
@@ -978,7 +945,6 @@ class Difficulty extends DataClass implements Insertable<Difficulty> {
 
 class DifficultiesCompanion extends UpdateCompanion<Difficulty> {
   final Value<int> id;
-  final Value<String> uid;
   final Value<String> name;
   final Value<int> colorValue;
   final Value<int> score;
@@ -988,7 +954,6 @@ class DifficultiesCompanion extends UpdateCompanion<Difficulty> {
   final Value<int> location;
   const DifficultiesCompanion({
     this.id = const Value.absent(),
-    this.uid = const Value.absent(),
     this.name = const Value.absent(),
     this.colorValue = const Value.absent(),
     this.score = const Value.absent(),
@@ -999,7 +964,6 @@ class DifficultiesCompanion extends UpdateCompanion<Difficulty> {
   });
   DifficultiesCompanion.insert({
     this.id = const Value.absent(),
-    required String uid,
     required String name,
     required int colorValue,
     required int score,
@@ -1007,14 +971,12 @@ class DifficultiesCompanion extends UpdateCompanion<Difficulty> {
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     required int location,
-  })  : uid = Value(uid),
-        name = Value(name),
+  })  : name = Value(name),
         colorValue = Value(colorValue),
         score = Value(score),
         location = Value(location);
   static Insertable<Difficulty> custom({
     Expression<int>? id,
-    Expression<String>? uid,
     Expression<String>? name,
     Expression<int>? colorValue,
     Expression<int>? score,
@@ -1025,7 +987,6 @@ class DifficultiesCompanion extends UpdateCompanion<Difficulty> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (uid != null) 'uid': uid,
       if (name != null) 'name': name,
       if (colorValue != null) 'color_value': colorValue,
       if (score != null) 'score': score,
@@ -1038,7 +999,6 @@ class DifficultiesCompanion extends UpdateCompanion<Difficulty> {
 
   DifficultiesCompanion copyWith(
       {Value<int>? id,
-      Value<String>? uid,
       Value<String>? name,
       Value<int>? colorValue,
       Value<int>? score,
@@ -1048,7 +1008,6 @@ class DifficultiesCompanion extends UpdateCompanion<Difficulty> {
       Value<int>? location}) {
     return DifficultiesCompanion(
       id: id ?? this.id,
-      uid: uid ?? this.uid,
       name: name ?? this.name,
       colorValue: colorValue ?? this.colorValue,
       score: score ?? this.score,
@@ -1064,9 +1023,6 @@ class DifficultiesCompanion extends UpdateCompanion<Difficulty> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
-    }
-    if (uid.present) {
-      map['uid'] = Variable<String>(uid.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -1096,7 +1052,6 @@ class DifficultiesCompanion extends UpdateCompanion<Difficulty> {
   String toString() {
     return (StringBuffer('DifficultiesCompanion(')
           ..write('id: $id, ')
-          ..write('uid: $uid, ')
           ..write('name: $name, ')
           ..write('colorValue: $colorValue, ')
           ..write('score: $score, ')
@@ -2070,22 +2025,225 @@ typedef $$LocationsTableUpdateCompanionBuilder = LocationsCompanion Function({
   Value<DateTime> updatedAt,
 });
 
+final class $$LocationsTableReferences
+    extends BaseReferences<_$AppDatabase, $LocationsTable, Location> {
+  $$LocationsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$ExerciseRecordsTable, List<ExerciseRecord>>
+      _exerciseRecordsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.exerciseRecords,
+              aliasName: $_aliasNameGenerator(
+                  db.locations.id, db.exerciseRecords.location));
+
+  $$ExerciseRecordsTableProcessedTableManager get exerciseRecordsRefs {
+    final manager =
+        $$ExerciseRecordsTableTableManager($_db, $_db.exerciseRecords)
+            .filter((f) => f.location.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_exerciseRecordsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$DifficultiesTable, List<Difficulty>>
+      _difficultiesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+          db.difficulties,
+          aliasName:
+              $_aliasNameGenerator(db.locations.id, db.difficulties.location));
+
+  $$DifficultiesTableProcessedTableManager get difficultiesRefs {
+    final manager = $$DifficultiesTableTableManager($_db, $_db.difficulties)
+        .filter((f) => f.location.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_difficultiesRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$LocationsTableFilterComposer
+    extends Composer<_$AppDatabase, $LocationsTable> {
+  $$LocationsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get locationUid => $composableBuilder(
+      column: $table.locationUid, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get locationName => $composableBuilder(
+      column: $table.locationName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> exerciseRecordsRefs(
+      Expression<bool> Function($$ExerciseRecordsTableFilterComposer f) f) {
+    final $$ExerciseRecordsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.exerciseRecords,
+        getReferencedColumn: (t) => t.location,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ExerciseRecordsTableFilterComposer(
+              $db: $db,
+              $table: $db.exerciseRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> difficultiesRefs(
+      Expression<bool> Function($$DifficultiesTableFilterComposer f) f) {
+    final $$DifficultiesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.difficulties,
+        getReferencedColumn: (t) => t.location,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$DifficultiesTableFilterComposer(
+              $db: $db,
+              $table: $db.difficulties,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$LocationsTableOrderingComposer
+    extends Composer<_$AppDatabase, $LocationsTable> {
+  $$LocationsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get locationUid => $composableBuilder(
+      column: $table.locationUid, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get locationName => $composableBuilder(
+      column: $table.locationName,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$LocationsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LocationsTable> {
+  $$LocationsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get locationUid => $composableBuilder(
+      column: $table.locationUid, builder: (column) => column);
+
+  GeneratedColumn<String> get locationName => $composableBuilder(
+      column: $table.locationName, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  Expression<T> exerciseRecordsRefs<T extends Object>(
+      Expression<T> Function($$ExerciseRecordsTableAnnotationComposer a) f) {
+    final $$ExerciseRecordsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.exerciseRecords,
+        getReferencedColumn: (t) => t.location,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ExerciseRecordsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.exerciseRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> difficultiesRefs<T extends Object>(
+      Expression<T> Function($$DifficultiesTableAnnotationComposer a) f) {
+    final $$DifficultiesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.difficulties,
+        getReferencedColumn: (t) => t.location,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$DifficultiesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.difficulties,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
 class $$LocationsTableTableManager extends RootTableManager<
     _$AppDatabase,
     $LocationsTable,
     Location,
     $$LocationsTableFilterComposer,
     $$LocationsTableOrderingComposer,
+    $$LocationsTableAnnotationComposer,
     $$LocationsTableCreateCompanionBuilder,
-    $$LocationsTableUpdateCompanionBuilder> {
+    $$LocationsTableUpdateCompanionBuilder,
+    (Location, $$LocationsTableReferences),
+    Location,
+    PrefetchHooks Function({bool exerciseRecordsRefs, bool difficultiesRefs})> {
   $$LocationsTableTableManager(_$AppDatabase db, $LocationsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$LocationsTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$LocationsTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$LocationsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LocationsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LocationsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> locationUid = const Value.absent(),
@@ -2114,94 +2272,68 @@ class $$LocationsTableTableManager extends RootTableManager<
             createdAt: createdAt,
             updatedAt: updatedAt,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$LocationsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {exerciseRecordsRefs = false, difficultiesRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (exerciseRecordsRefs) db.exerciseRecords,
+                if (difficultiesRefs) db.difficulties
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (exerciseRecordsRefs)
+                    await $_getPrefetchedData<Location, $LocationsTable,
+                            ExerciseRecord>(
+                        currentTable: table,
+                        referencedTable: $$LocationsTableReferences
+                            ._exerciseRecordsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$LocationsTableReferences(db, table, p0)
+                                .exerciseRecordsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.location == item.id),
+                        typedResults: items),
+                  if (difficultiesRefs)
+                    await $_getPrefetchedData<Location, $LocationsTable,
+                            Difficulty>(
+                        currentTable: table,
+                        referencedTable: $$LocationsTableReferences
+                            ._difficultiesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$LocationsTableReferences(db, table, p0)
+                                .difficultiesRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.location == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
-class $$LocationsTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $LocationsTable> {
-  $$LocationsTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get locationUid => $state.composableBuilder(
-      column: $state.table.locationUid,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get locationName => $state.composableBuilder(
-      column: $state.table.locationName,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ComposableFilter exerciseRecordsRefs(
-      ComposableFilter Function($$ExerciseRecordsTableFilterComposer f) f) {
-    final $$ExerciseRecordsTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.exerciseRecords,
-            getReferencedColumn: (t) => t.location,
-            builder: (joinBuilder, parentComposers) =>
-                $$ExerciseRecordsTableFilterComposer(ComposerState($state.db,
-                    $state.db.exerciseRecords, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-
-  ComposableFilter difficultiesRefs(
-      ComposableFilter Function($$DifficultiesTableFilterComposer f) f) {
-    final $$DifficultiesTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.difficulties,
-        getReferencedColumn: (t) => t.location,
-        builder: (joinBuilder, parentComposers) =>
-            $$DifficultiesTableFilterComposer(ComposerState($state.db,
-                $state.db.difficulties, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-}
-
-class $$LocationsTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $LocationsTable> {
-  $$LocationsTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get locationUid => $state.composableBuilder(
-      column: $state.table.locationUid,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get locationName => $state.composableBuilder(
-      column: $state.table.locationName,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$LocationsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $LocationsTable,
+    Location,
+    $$LocationsTableFilterComposer,
+    $$LocationsTableOrderingComposer,
+    $$LocationsTableAnnotationComposer,
+    $$LocationsTableCreateCompanionBuilder,
+    $$LocationsTableUpdateCompanionBuilder,
+    (Location, $$LocationsTableReferences),
+    Location,
+    PrefetchHooks Function({bool exerciseRecordsRefs, bool difficultiesRefs})>;
 typedef $$ExerciseRecordsTableCreateCompanionBuilder = ExerciseRecordsCompanion
     Function({
   Value<int> id,
@@ -2221,23 +2353,302 @@ typedef $$ExerciseRecordsTableUpdateCompanionBuilder = ExerciseRecordsCompanion
   Value<int> location,
 });
 
+final class $$ExerciseRecordsTableReferences extends BaseReferences<
+    _$AppDatabase, $ExerciseRecordsTable, ExerciseRecord> {
+  $$ExerciseRecordsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $LocationsTable _locationTable(_$AppDatabase db) =>
+      db.locations.createAlias(
+          $_aliasNameGenerator(db.exerciseRecords.location, db.locations.id));
+
+  $$LocationsTableProcessedTableManager get location {
+    final $_column = $_itemColumn<int>('location')!;
+
+    final manager = $$LocationsTableTableManager($_db, $_db.locations)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_locationTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$ClimbingProblemsTable, List<ClimbingProblem>>
+      _climbingProblemsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.climbingProblems,
+              aliasName: $_aliasNameGenerator(
+                  db.exerciseRecords.id, db.climbingProblems.exerciseRecord));
+
+  $$ClimbingProblemsTableProcessedTableManager get climbingProblemsRefs {
+    final manager = $$ClimbingProblemsTableTableManager(
+            $_db, $_db.climbingProblems)
+        .filter((f) => f.exerciseRecord.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_climbingProblemsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$VideosTable, List<Video>> _videosRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.videos,
+          aliasName: $_aliasNameGenerator(
+              db.exerciseRecords.id, db.videos.exerciseRecord));
+
+  $$VideosTableProcessedTableManager get videosRefs {
+    final manager = $$VideosTableTableManager($_db, $_db.videos)
+        .filter((f) => f.exerciseRecord.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_videosRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$ExerciseRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $ExerciseRecordsTable> {
+  $$ExerciseRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get fileName => $composableBuilder(
+      column: $table.fileName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isFinished => $composableBuilder(
+      column: $table.isFinished, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  $$LocationsTableFilterComposer get location {
+    final $$LocationsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.location,
+        referencedTable: $db.locations,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$LocationsTableFilterComposer(
+              $db: $db,
+              $table: $db.locations,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> climbingProblemsRefs(
+      Expression<bool> Function($$ClimbingProblemsTableFilterComposer f) f) {
+    final $$ClimbingProblemsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.climbingProblems,
+        getReferencedColumn: (t) => t.exerciseRecord,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ClimbingProblemsTableFilterComposer(
+              $db: $db,
+              $table: $db.climbingProblems,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> videosRefs(
+      Expression<bool> Function($$VideosTableFilterComposer f) f) {
+    final $$VideosTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.videos,
+        getReferencedColumn: (t) => t.exerciseRecord,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$VideosTableFilterComposer(
+              $db: $db,
+              $table: $db.videos,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$ExerciseRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ExerciseRecordsTable> {
+  $$ExerciseRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get fileName => $composableBuilder(
+      column: $table.fileName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isFinished => $composableBuilder(
+      column: $table.isFinished, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  $$LocationsTableOrderingComposer get location {
+    final $$LocationsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.location,
+        referencedTable: $db.locations,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$LocationsTableOrderingComposer(
+              $db: $db,
+              $table: $db.locations,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ExerciseRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ExerciseRecordsTable> {
+  $$ExerciseRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get fileName =>
+      $composableBuilder(column: $table.fileName, builder: (column) => column);
+
+  GeneratedColumn<bool> get isFinished => $composableBuilder(
+      column: $table.isFinished, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$LocationsTableAnnotationComposer get location {
+    final $$LocationsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.location,
+        referencedTable: $db.locations,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$LocationsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.locations,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> climbingProblemsRefs<T extends Object>(
+      Expression<T> Function($$ClimbingProblemsTableAnnotationComposer a) f) {
+    final $$ClimbingProblemsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.climbingProblems,
+        getReferencedColumn: (t) => t.exerciseRecord,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ClimbingProblemsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.climbingProblems,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> videosRefs<T extends Object>(
+      Expression<T> Function($$VideosTableAnnotationComposer a) f) {
+    final $$VideosTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.videos,
+        getReferencedColumn: (t) => t.exerciseRecord,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$VideosTableAnnotationComposer(
+              $db: $db,
+              $table: $db.videos,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
 class $$ExerciseRecordsTableTableManager extends RootTableManager<
     _$AppDatabase,
     $ExerciseRecordsTable,
     ExerciseRecord,
     $$ExerciseRecordsTableFilterComposer,
     $$ExerciseRecordsTableOrderingComposer,
+    $$ExerciseRecordsTableAnnotationComposer,
     $$ExerciseRecordsTableCreateCompanionBuilder,
-    $$ExerciseRecordsTableUpdateCompanionBuilder> {
+    $$ExerciseRecordsTableUpdateCompanionBuilder,
+    (ExerciseRecord, $$ExerciseRecordsTableReferences),
+    ExerciseRecord,
+    PrefetchHooks Function(
+        {bool location, bool climbingProblemsRefs, bool videosRefs})> {
   $$ExerciseRecordsTableTableManager(
       _$AppDatabase db, $ExerciseRecordsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ExerciseRecordsTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ExerciseRecordsTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ExerciseRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ExerciseRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ExerciseRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> fileName = const Value.absent(),
@@ -2270,122 +2681,99 @@ class $$ExerciseRecordsTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
             location: location,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ExerciseRecordsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {location = false,
+              climbingProblemsRefs = false,
+              videosRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (climbingProblemsRefs) db.climbingProblems,
+                if (videosRefs) db.videos
+              ],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (location) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.location,
+                    referencedTable:
+                        $$ExerciseRecordsTableReferences._locationTable(db),
+                    referencedColumn:
+                        $$ExerciseRecordsTableReferences._locationTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (climbingProblemsRefs)
+                    await $_getPrefetchedData<ExerciseRecord,
+                            $ExerciseRecordsTable, ClimbingProblem>(
+                        currentTable: table,
+                        referencedTable: $$ExerciseRecordsTableReferences
+                            ._climbingProblemsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ExerciseRecordsTableReferences(db, table, p0)
+                                .climbingProblemsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.exerciseRecord == item.id),
+                        typedResults: items),
+                  if (videosRefs)
+                    await $_getPrefetchedData<ExerciseRecord,
+                            $ExerciseRecordsTable, Video>(
+                        currentTable: table,
+                        referencedTable: $$ExerciseRecordsTableReferences
+                            ._videosRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ExerciseRecordsTableReferences(db, table, p0)
+                                .videosRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.exerciseRecord == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
-class $$ExerciseRecordsTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ExerciseRecordsTable> {
-  $$ExerciseRecordsTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get fileName => $state.composableBuilder(
-      column: $state.table.fileName,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get isFinished => $state.composableBuilder(
-      column: $state.table.isFinished,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$LocationsTableFilterComposer get location {
-    final $$LocationsTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.location,
-        referencedTable: $state.db.locations,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$LocationsTableFilterComposer(ComposerState(
-                $state.db, $state.db.locations, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  ComposableFilter climbingProblemsRefs(
-      ComposableFilter Function($$ClimbingProblemsTableFilterComposer f) f) {
-    final $$ClimbingProblemsTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.climbingProblems,
-            getReferencedColumn: (t) => t.exerciseRecord,
-            builder: (joinBuilder, parentComposers) =>
-                $$ClimbingProblemsTableFilterComposer(ComposerState($state.db,
-                    $state.db.climbingProblems, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-
-  ComposableFilter videosRefs(
-      ComposableFilter Function($$VideosTableFilterComposer f) f) {
-    final $$VideosTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.videos,
-        getReferencedColumn: (t) => t.exerciseRecord,
-        builder: (joinBuilder, parentComposers) => $$VideosTableFilterComposer(
-            ComposerState(
-                $state.db, $state.db.videos, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-}
-
-class $$ExerciseRecordsTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ExerciseRecordsTable> {
-  $$ExerciseRecordsTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get fileName => $state.composableBuilder(
-      column: $state.table.fileName,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get isFinished => $state.composableBuilder(
-      column: $state.table.isFinished,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$LocationsTableOrderingComposer get location {
-    final $$LocationsTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.location,
-        referencedTable: $state.db.locations,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$LocationsTableOrderingComposer(ComposerState(
-                $state.db, $state.db.locations, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
-
+typedef $$ExerciseRecordsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ExerciseRecordsTable,
+    ExerciseRecord,
+    $$ExerciseRecordsTableFilterComposer,
+    $$ExerciseRecordsTableOrderingComposer,
+    $$ExerciseRecordsTableAnnotationComposer,
+    $$ExerciseRecordsTableCreateCompanionBuilder,
+    $$ExerciseRecordsTableUpdateCompanionBuilder,
+    (ExerciseRecord, $$ExerciseRecordsTableReferences),
+    ExerciseRecord,
+    PrefetchHooks Function(
+        {bool location, bool climbingProblemsRefs, bool videosRefs})>;
 typedef $$DifficultiesTableCreateCompanionBuilder = DifficultiesCompanion
     Function({
   Value<int> id,
-  required String uid,
   required String name,
   required int colorValue,
   required int score,
@@ -2397,7 +2785,6 @@ typedef $$DifficultiesTableCreateCompanionBuilder = DifficultiesCompanion
 typedef $$DifficultiesTableUpdateCompanionBuilder = DifficultiesCompanion
     Function({
   Value<int> id,
-  Value<String> uid,
   Value<String> name,
   Value<int> colorValue,
   Value<int> score,
@@ -2407,25 +2794,262 @@ typedef $$DifficultiesTableUpdateCompanionBuilder = DifficultiesCompanion
   Value<int> location,
 });
 
+final class $$DifficultiesTableReferences
+    extends BaseReferences<_$AppDatabase, $DifficultiesTable, Difficulty> {
+  $$DifficultiesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $LocationsTable _locationTable(_$AppDatabase db) =>
+      db.locations.createAlias(
+          $_aliasNameGenerator(db.difficulties.location, db.locations.id));
+
+  $$LocationsTableProcessedTableManager get location {
+    final $_column = $_itemColumn<int>('location')!;
+
+    final manager = $$LocationsTableTableManager($_db, $_db.locations)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_locationTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$ClimbingProblemsTable, List<ClimbingProblem>>
+      _climbingProblemsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.climbingProblems,
+              aliasName: $_aliasNameGenerator(
+                  db.difficulties.id, db.climbingProblems.difficulty));
+
+  $$ClimbingProblemsTableProcessedTableManager get climbingProblemsRefs {
+    final manager =
+        $$ClimbingProblemsTableTableManager($_db, $_db.climbingProblems)
+            .filter((f) => f.difficulty.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_climbingProblemsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$DifficultiesTableFilterComposer
+    extends Composer<_$AppDatabase, $DifficultiesTable> {
+  $$DifficultiesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get colorValue => $composableBuilder(
+      column: $table.colorValue, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get score => $composableBuilder(
+      column: $table.score, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  $$LocationsTableFilterComposer get location {
+    final $$LocationsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.location,
+        referencedTable: $db.locations,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$LocationsTableFilterComposer(
+              $db: $db,
+              $table: $db.locations,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> climbingProblemsRefs(
+      Expression<bool> Function($$ClimbingProblemsTableFilterComposer f) f) {
+    final $$ClimbingProblemsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.climbingProblems,
+        getReferencedColumn: (t) => t.difficulty,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ClimbingProblemsTableFilterComposer(
+              $db: $db,
+              $table: $db.climbingProblems,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$DifficultiesTableOrderingComposer
+    extends Composer<_$AppDatabase, $DifficultiesTable> {
+  $$DifficultiesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get colorValue => $composableBuilder(
+      column: $table.colorValue, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get score => $composableBuilder(
+      column: $table.score, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  $$LocationsTableOrderingComposer get location {
+    final $$LocationsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.location,
+        referencedTable: $db.locations,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$LocationsTableOrderingComposer(
+              $db: $db,
+              $table: $db.locations,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$DifficultiesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DifficultiesTable> {
+  $$DifficultiesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get colorValue => $composableBuilder(
+      column: $table.colorValue, builder: (column) => column);
+
+  GeneratedColumn<int> get score =>
+      $composableBuilder(column: $table.score, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$LocationsTableAnnotationComposer get location {
+    final $$LocationsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.location,
+        referencedTable: $db.locations,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$LocationsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.locations,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> climbingProblemsRefs<T extends Object>(
+      Expression<T> Function($$ClimbingProblemsTableAnnotationComposer a) f) {
+    final $$ClimbingProblemsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.climbingProblems,
+        getReferencedColumn: (t) => t.difficulty,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ClimbingProblemsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.climbingProblems,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
 class $$DifficultiesTableTableManager extends RootTableManager<
     _$AppDatabase,
     $DifficultiesTable,
     Difficulty,
     $$DifficultiesTableFilterComposer,
     $$DifficultiesTableOrderingComposer,
+    $$DifficultiesTableAnnotationComposer,
     $$DifficultiesTableCreateCompanionBuilder,
-    $$DifficultiesTableUpdateCompanionBuilder> {
+    $$DifficultiesTableUpdateCompanionBuilder,
+    (Difficulty, $$DifficultiesTableReferences),
+    Difficulty,
+    PrefetchHooks Function({bool location, bool climbingProblemsRefs})> {
   $$DifficultiesTableTableManager(_$AppDatabase db, $DifficultiesTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$DifficultiesTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$DifficultiesTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$DifficultiesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DifficultiesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DifficultiesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<String> uid = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<int> colorValue = const Value.absent(),
             Value<int> score = const Value.absent(),
@@ -2436,7 +3060,6 @@ class $$DifficultiesTableTableManager extends RootTableManager<
           }) =>
               DifficultiesCompanion(
             id: id,
-            uid: uid,
             name: name,
             colorValue: colorValue,
             score: score,
@@ -2447,7 +3070,6 @@ class $$DifficultiesTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required String uid,
             required String name,
             required int colorValue,
             required int score,
@@ -2458,7 +3080,6 @@ class $$DifficultiesTableTableManager extends RootTableManager<
           }) =>
               DifficultiesCompanion.insert(
             id: id,
-            uid: uid,
             name: name,
             colorValue: colorValue,
             score: score,
@@ -2467,135 +3088,79 @@ class $$DifficultiesTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
             location: location,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$DifficultiesTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {location = false, climbingProblemsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (climbingProblemsRefs) db.climbingProblems
+              ],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (location) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.location,
+                    referencedTable:
+                        $$DifficultiesTableReferences._locationTable(db),
+                    referencedColumn:
+                        $$DifficultiesTableReferences._locationTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (climbingProblemsRefs)
+                    await $_getPrefetchedData<Difficulty, $DifficultiesTable,
+                            ClimbingProblem>(
+                        currentTable: table,
+                        referencedTable: $$DifficultiesTableReferences
+                            ._climbingProblemsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$DifficultiesTableReferences(db, table, p0)
+                                .climbingProblemsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.difficulty == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
-class $$DifficultiesTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $DifficultiesTable> {
-  $$DifficultiesTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get uid => $state.composableBuilder(
-      column: $state.table.uid,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get colorValue => $state.composableBuilder(
-      column: $state.table.colorValue,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get score => $state.composableBuilder(
-      column: $state.table.score,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get isActive => $state.composableBuilder(
-      column: $state.table.isActive,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$LocationsTableFilterComposer get location {
-    final $$LocationsTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.location,
-        referencedTable: $state.db.locations,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$LocationsTableFilterComposer(ComposerState(
-                $state.db, $state.db.locations, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  ComposableFilter climbingProblemsRefs(
-      ComposableFilter Function($$ClimbingProblemsTableFilterComposer f) f) {
-    final $$ClimbingProblemsTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.climbingProblems,
-            getReferencedColumn: (t) => t.difficulty,
-            builder: (joinBuilder, parentComposers) =>
-                $$ClimbingProblemsTableFilterComposer(ComposerState($state.db,
-                    $state.db.climbingProblems, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-}
-
-class $$DifficultiesTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $DifficultiesTable> {
-  $$DifficultiesTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get uid => $state.composableBuilder(
-      column: $state.table.uid,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get colorValue => $state.composableBuilder(
-      column: $state.table.colorValue,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get score => $state.composableBuilder(
-      column: $state.table.score,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get isActive => $state.composableBuilder(
-      column: $state.table.isActive,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$LocationsTableOrderingComposer get location {
-    final $$LocationsTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.location,
-        referencedTable: $state.db.locations,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$LocationsTableOrderingComposer(ComposerState(
-                $state.db, $state.db.locations, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
-
+typedef $$DifficultiesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $DifficultiesTable,
+    Difficulty,
+    $$DifficultiesTableFilterComposer,
+    $$DifficultiesTableOrderingComposer,
+    $$DifficultiesTableAnnotationComposer,
+    $$DifficultiesTableCreateCompanionBuilder,
+    $$DifficultiesTableUpdateCompanionBuilder,
+    (Difficulty, $$DifficultiesTableReferences),
+    Difficulty,
+    PrefetchHooks Function({bool location, bool climbingProblemsRefs})>;
 typedef $$ClimbingProblemsTableCreateCompanionBuilder
     = ClimbingProblemsCompanion Function({
   Value<int> id,
@@ -2619,23 +3184,328 @@ typedef $$ClimbingProblemsTableUpdateCompanionBuilder
   Value<DateTime> updatedAt,
 });
 
+final class $$ClimbingProblemsTableReferences extends BaseReferences<
+    _$AppDatabase, $ClimbingProblemsTable, ClimbingProblem> {
+  $$ClimbingProblemsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ExerciseRecordsTable _exerciseRecordTable(_$AppDatabase db) =>
+      db.exerciseRecords.createAlias($_aliasNameGenerator(
+          db.climbingProblems.exerciseRecord, db.exerciseRecords.id));
+
+  $$ExerciseRecordsTableProcessedTableManager get exerciseRecord {
+    final $_column = $_itemColumn<int>('exercise_record')!;
+
+    final manager =
+        $$ExerciseRecordsTableTableManager($_db, $_db.exerciseRecords)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_exerciseRecordTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $DifficultiesTable _difficultyTable(_$AppDatabase db) =>
+      db.difficulties.createAlias($_aliasNameGenerator(
+          db.climbingProblems.difficulty, db.difficulties.id));
+
+  $$DifficultiesTableProcessedTableManager get difficulty {
+    final $_column = $_itemColumn<int>('difficulty')!;
+
+    final manager = $$DifficultiesTableTableManager($_db, $_db.difficulties)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_difficultyTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$VideosTable, List<Video>> _videosRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.videos,
+          aliasName: $_aliasNameGenerator(
+              db.climbingProblems.id, db.videos.climbingProblem));
+
+  $$VideosTableProcessedTableManager get videosRefs {
+    final manager = $$VideosTableTableManager($_db, $_db.videos).filter(
+        (f) => f.climbingProblem.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_videosRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$ClimbingProblemsTableFilterComposer
+    extends Composer<_$AppDatabase, $ClimbingProblemsTable> {
+  $$ClimbingProblemsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isSuccess => $composableBuilder(
+      column: $table.isSuccess, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isFinished => $composableBuilder(
+      column: $table.isFinished, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get trialCount => $composableBuilder(
+      column: $table.trialCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  $$ExerciseRecordsTableFilterComposer get exerciseRecord {
+    final $$ExerciseRecordsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.exerciseRecord,
+        referencedTable: $db.exerciseRecords,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ExerciseRecordsTableFilterComposer(
+              $db: $db,
+              $table: $db.exerciseRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$DifficultiesTableFilterComposer get difficulty {
+    final $$DifficultiesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.difficulty,
+        referencedTable: $db.difficulties,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$DifficultiesTableFilterComposer(
+              $db: $db,
+              $table: $db.difficulties,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> videosRefs(
+      Expression<bool> Function($$VideosTableFilterComposer f) f) {
+    final $$VideosTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.videos,
+        getReferencedColumn: (t) => t.climbingProblem,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$VideosTableFilterComposer(
+              $db: $db,
+              $table: $db.videos,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$ClimbingProblemsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ClimbingProblemsTable> {
+  $$ClimbingProblemsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isSuccess => $composableBuilder(
+      column: $table.isSuccess, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isFinished => $composableBuilder(
+      column: $table.isFinished, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get trialCount => $composableBuilder(
+      column: $table.trialCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  $$ExerciseRecordsTableOrderingComposer get exerciseRecord {
+    final $$ExerciseRecordsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.exerciseRecord,
+        referencedTable: $db.exerciseRecords,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ExerciseRecordsTableOrderingComposer(
+              $db: $db,
+              $table: $db.exerciseRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$DifficultiesTableOrderingComposer get difficulty {
+    final $$DifficultiesTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.difficulty,
+        referencedTable: $db.difficulties,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$DifficultiesTableOrderingComposer(
+              $db: $db,
+              $table: $db.difficulties,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ClimbingProblemsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ClimbingProblemsTable> {
+  $$ClimbingProblemsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSuccess =>
+      $composableBuilder(column: $table.isSuccess, builder: (column) => column);
+
+  GeneratedColumn<bool> get isFinished => $composableBuilder(
+      column: $table.isFinished, builder: (column) => column);
+
+  GeneratedColumn<int> get trialCount => $composableBuilder(
+      column: $table.trialCount, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$ExerciseRecordsTableAnnotationComposer get exerciseRecord {
+    final $$ExerciseRecordsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.exerciseRecord,
+        referencedTable: $db.exerciseRecords,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ExerciseRecordsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.exerciseRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$DifficultiesTableAnnotationComposer get difficulty {
+    final $$DifficultiesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.difficulty,
+        referencedTable: $db.difficulties,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$DifficultiesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.difficulties,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> videosRefs<T extends Object>(
+      Expression<T> Function($$VideosTableAnnotationComposer a) f) {
+    final $$VideosTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.videos,
+        getReferencedColumn: (t) => t.climbingProblem,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$VideosTableAnnotationComposer(
+              $db: $db,
+              $table: $db.videos,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
 class $$ClimbingProblemsTableTableManager extends RootTableManager<
     _$AppDatabase,
     $ClimbingProblemsTable,
     ClimbingProblem,
     $$ClimbingProblemsTableFilterComposer,
     $$ClimbingProblemsTableOrderingComposer,
+    $$ClimbingProblemsTableAnnotationComposer,
     $$ClimbingProblemsTableCreateCompanionBuilder,
-    $$ClimbingProblemsTableUpdateCompanionBuilder> {
+    $$ClimbingProblemsTableUpdateCompanionBuilder,
+    (ClimbingProblem, $$ClimbingProblemsTableReferences),
+    ClimbingProblem,
+    PrefetchHooks Function(
+        {bool exerciseRecord, bool difficulty, bool videosRefs})> {
   $$ClimbingProblemsTableTableManager(
       _$AppDatabase db, $ClimbingProblemsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ClimbingProblemsTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ClimbingProblemsTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ClimbingProblemsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ClimbingProblemsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ClimbingProblemsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<bool> isSuccess = const Value.absent(),
@@ -2676,140 +3546,92 @@ class $$ClimbingProblemsTableTableManager extends RootTableManager<
             createdAt: createdAt,
             updatedAt: updatedAt,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ClimbingProblemsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {exerciseRecord = false,
+              difficulty = false,
+              videosRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (videosRefs) db.videos],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (exerciseRecord) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.exerciseRecord,
+                    referencedTable: $$ClimbingProblemsTableReferences
+                        ._exerciseRecordTable(db),
+                    referencedColumn: $$ClimbingProblemsTableReferences
+                        ._exerciseRecordTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (difficulty) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.difficulty,
+                    referencedTable:
+                        $$ClimbingProblemsTableReferences._difficultyTable(db),
+                    referencedColumn: $$ClimbingProblemsTableReferences
+                        ._difficultyTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (videosRefs)
+                    await $_getPrefetchedData<ClimbingProblem,
+                            $ClimbingProblemsTable, Video>(
+                        currentTable: table,
+                        referencedTable: $$ClimbingProblemsTableReferences
+                            ._videosRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ClimbingProblemsTableReferences(db, table, p0)
+                                .videosRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.climbingProblem == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
-class $$ClimbingProblemsTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ClimbingProblemsTable> {
-  $$ClimbingProblemsTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get isSuccess => $state.composableBuilder(
-      column: $state.table.isSuccess,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get isFinished => $state.composableBuilder(
-      column: $state.table.isFinished,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get trialCount => $state.composableBuilder(
-      column: $state.table.trialCount,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$ExerciseRecordsTableFilterComposer get exerciseRecord {
-    final $$ExerciseRecordsTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.exerciseRecord,
-            referencedTable: $state.db.exerciseRecords,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$ExerciseRecordsTableFilterComposer(ComposerState($state.db,
-                    $state.db.exerciseRecords, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  $$DifficultiesTableFilterComposer get difficulty {
-    final $$DifficultiesTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.difficulty,
-        referencedTable: $state.db.difficulties,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$DifficultiesTableFilterComposer(ComposerState($state.db,
-                $state.db.difficulties, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  ComposableFilter videosRefs(
-      ComposableFilter Function($$VideosTableFilterComposer f) f) {
-    final $$VideosTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.videos,
-        getReferencedColumn: (t) => t.climbingProblem,
-        builder: (joinBuilder, parentComposers) => $$VideosTableFilterComposer(
-            ComposerState(
-                $state.db, $state.db.videos, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-}
-
-class $$ClimbingProblemsTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ClimbingProblemsTable> {
-  $$ClimbingProblemsTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get isSuccess => $state.composableBuilder(
-      column: $state.table.isSuccess,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get isFinished => $state.composableBuilder(
-      column: $state.table.isFinished,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get trialCount => $state.composableBuilder(
-      column: $state.table.trialCount,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$ExerciseRecordsTableOrderingComposer get exerciseRecord {
-    final $$ExerciseRecordsTableOrderingComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.exerciseRecord,
-            referencedTable: $state.db.exerciseRecords,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$ExerciseRecordsTableOrderingComposer(ComposerState($state.db,
-                    $state.db.exerciseRecords, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  $$DifficultiesTableOrderingComposer get difficulty {
-    final $$DifficultiesTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.difficulty,
-        referencedTable: $state.db.difficulties,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$DifficultiesTableOrderingComposer(ComposerState($state.db,
-                $state.db.difficulties, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
-
+typedef $$ClimbingProblemsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ClimbingProblemsTable,
+    ClimbingProblem,
+    $$ClimbingProblemsTableFilterComposer,
+    $$ClimbingProblemsTableOrderingComposer,
+    $$ClimbingProblemsTableAnnotationComposer,
+    $$ClimbingProblemsTableCreateCompanionBuilder,
+    $$ClimbingProblemsTableUpdateCompanionBuilder,
+    (ClimbingProblem, $$ClimbingProblemsTableReferences),
+    ClimbingProblem,
+    PrefetchHooks Function(
+        {bool exerciseRecord, bool difficulty, bool videosRefs})>;
 typedef $$VideosTableCreateCompanionBuilder = VideosCompanion Function({
   Value<int> id,
   required String fileName,
@@ -2833,22 +3655,278 @@ typedef $$VideosTableUpdateCompanionBuilder = VideosCompanion Function({
   Value<DateTime> updatedAt,
 });
 
+final class $$VideosTableReferences
+    extends BaseReferences<_$AppDatabase, $VideosTable, Video> {
+  $$VideosTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $ClimbingProblemsTable _climbingProblemTable(_$AppDatabase db) =>
+      db.climbingProblems.createAlias($_aliasNameGenerator(
+          db.videos.climbingProblem, db.climbingProblems.id));
+
+  $$ClimbingProblemsTableProcessedTableManager get climbingProblem {
+    final $_column = $_itemColumn<int>('climbing_problem')!;
+
+    final manager =
+        $$ClimbingProblemsTableTableManager($_db, $_db.climbingProblems)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_climbingProblemTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $ExerciseRecordsTable _exerciseRecordTable(_$AppDatabase db) =>
+      db.exerciseRecords.createAlias($_aliasNameGenerator(
+          db.videos.exerciseRecord, db.exerciseRecords.id));
+
+  $$ExerciseRecordsTableProcessedTableManager get exerciseRecord {
+    final $_column = $_itemColumn<int>('exercise_record')!;
+
+    final manager =
+        $$ExerciseRecordsTableTableManager($_db, $_db.exerciseRecords)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_exerciseRecordTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$VideosTableFilterComposer
+    extends Composer<_$AppDatabase, $VideosTable> {
+  $$VideosTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get fileName => $composableBuilder(
+      column: $table.fileName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isLike => $composableBuilder(
+      column: $table.isLike, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isSuccess => $composableBuilder(
+      column: $table.isSuccess, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get trialNumber => $composableBuilder(
+      column: $table.trialNumber, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  $$ClimbingProblemsTableFilterComposer get climbingProblem {
+    final $$ClimbingProblemsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.climbingProblem,
+        referencedTable: $db.climbingProblems,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ClimbingProblemsTableFilterComposer(
+              $db: $db,
+              $table: $db.climbingProblems,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ExerciseRecordsTableFilterComposer get exerciseRecord {
+    final $$ExerciseRecordsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.exerciseRecord,
+        referencedTable: $db.exerciseRecords,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ExerciseRecordsTableFilterComposer(
+              $db: $db,
+              $table: $db.exerciseRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$VideosTableOrderingComposer
+    extends Composer<_$AppDatabase, $VideosTable> {
+  $$VideosTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get fileName => $composableBuilder(
+      column: $table.fileName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isLike => $composableBuilder(
+      column: $table.isLike, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isSuccess => $composableBuilder(
+      column: $table.isSuccess, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get trialNumber => $composableBuilder(
+      column: $table.trialNumber, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  $$ClimbingProblemsTableOrderingComposer get climbingProblem {
+    final $$ClimbingProblemsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.climbingProblem,
+        referencedTable: $db.climbingProblems,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ClimbingProblemsTableOrderingComposer(
+              $db: $db,
+              $table: $db.climbingProblems,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ExerciseRecordsTableOrderingComposer get exerciseRecord {
+    final $$ExerciseRecordsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.exerciseRecord,
+        referencedTable: $db.exerciseRecords,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ExerciseRecordsTableOrderingComposer(
+              $db: $db,
+              $table: $db.exerciseRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$VideosTableAnnotationComposer
+    extends Composer<_$AppDatabase, $VideosTable> {
+  $$VideosTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get fileName =>
+      $composableBuilder(column: $table.fileName, builder: (column) => column);
+
+  GeneratedColumn<bool> get isLike =>
+      $composableBuilder(column: $table.isLike, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSuccess =>
+      $composableBuilder(column: $table.isSuccess, builder: (column) => column);
+
+  GeneratedColumn<int> get trialNumber => $composableBuilder(
+      column: $table.trialNumber, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$ClimbingProblemsTableAnnotationComposer get climbingProblem {
+    final $$ClimbingProblemsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.climbingProblem,
+        referencedTable: $db.climbingProblems,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ClimbingProblemsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.climbingProblems,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ExerciseRecordsTableAnnotationComposer get exerciseRecord {
+    final $$ExerciseRecordsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.exerciseRecord,
+        referencedTable: $db.exerciseRecords,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ExerciseRecordsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.exerciseRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
 class $$VideosTableTableManager extends RootTableManager<
     _$AppDatabase,
     $VideosTable,
     Video,
     $$VideosTableFilterComposer,
     $$VideosTableOrderingComposer,
+    $$VideosTableAnnotationComposer,
     $$VideosTableCreateCompanionBuilder,
-    $$VideosTableUpdateCompanionBuilder> {
+    $$VideosTableUpdateCompanionBuilder,
+    (Video, $$VideosTableReferences),
+    Video,
+    PrefetchHooks Function({bool climbingProblem, bool exerciseRecord})> {
   $$VideosTableTableManager(_$AppDatabase db, $VideosTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$VideosTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$VideosTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$VideosTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VideosTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VideosTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> fileName = const Value.absent(),
@@ -2893,138 +3971,71 @@ class $$VideosTableTableManager extends RootTableManager<
             createdAt: createdAt,
             updatedAt: updatedAt,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$VideosTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: (
+              {climbingProblem = false, exerciseRecord = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (climbingProblem) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.climbingProblem,
+                    referencedTable:
+                        $$VideosTableReferences._climbingProblemTable(db),
+                    referencedColumn:
+                        $$VideosTableReferences._climbingProblemTable(db).id,
+                  ) as T;
+                }
+                if (exerciseRecord) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.exerciseRecord,
+                    referencedTable:
+                        $$VideosTableReferences._exerciseRecordTable(db),
+                    referencedColumn:
+                        $$VideosTableReferences._exerciseRecordTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ));
 }
 
-class $$VideosTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $VideosTable> {
-  $$VideosTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get fileName => $state.composableBuilder(
-      column: $state.table.fileName,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get isLike => $state.composableBuilder(
-      column: $state.table.isLike,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get isSuccess => $state.composableBuilder(
-      column: $state.table.isSuccess,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get trialNumber => $state.composableBuilder(
-      column: $state.table.trialNumber,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$ClimbingProblemsTableFilterComposer get climbingProblem {
-    final $$ClimbingProblemsTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.climbingProblem,
-            referencedTable: $state.db.climbingProblems,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$ClimbingProblemsTableFilterComposer(ComposerState($state.db,
-                    $state.db.climbingProblems, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  $$ExerciseRecordsTableFilterComposer get exerciseRecord {
-    final $$ExerciseRecordsTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.exerciseRecord,
-            referencedTable: $state.db.exerciseRecords,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$ExerciseRecordsTableFilterComposer(ComposerState($state.db,
-                    $state.db.exerciseRecords, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
-
-class $$VideosTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $VideosTable> {
-  $$VideosTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get fileName => $state.composableBuilder(
-      column: $state.table.fileName,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get isLike => $state.composableBuilder(
-      column: $state.table.isLike,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get isSuccess => $state.composableBuilder(
-      column: $state.table.isSuccess,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get trialNumber => $state.composableBuilder(
-      column: $state.table.trialNumber,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$ClimbingProblemsTableOrderingComposer get climbingProblem {
-    final $$ClimbingProblemsTableOrderingComposer composer = $state
-        .composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.climbingProblem,
-            referencedTable: $state.db.climbingProblems,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$ClimbingProblemsTableOrderingComposer(ComposerState($state.db,
-                    $state.db.climbingProblems, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  $$ExerciseRecordsTableOrderingComposer get exerciseRecord {
-    final $$ExerciseRecordsTableOrderingComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.exerciseRecord,
-            referencedTable: $state.db.exerciseRecords,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$ExerciseRecordsTableOrderingComposer(ComposerState($state.db,
-                    $state.db.exerciseRecords, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
+typedef $$VideosTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $VideosTable,
+    Video,
+    $$VideosTableFilterComposer,
+    $$VideosTableOrderingComposer,
+    $$VideosTableAnnotationComposer,
+    $$VideosTableCreateCompanionBuilder,
+    $$VideosTableUpdateCompanionBuilder,
+    (Video, $$VideosTableReferences),
+    Video,
+    PrefetchHooks Function({bool climbingProblem, bool exerciseRecord})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;

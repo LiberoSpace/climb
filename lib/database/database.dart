@@ -36,1189 +36,14 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (Migrator m) async {
         await m.createAll();
-
-        int locId;
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_gangnam',
-            locationName: '더클라임 강남',
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
-
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_nonhyeon',
-            locationName: '더클라임 논현',
-          ),
-        );
-
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
-
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_magok',
-            locationName: '더클라임 마곡',
-          ),
-        );
-
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
-
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_mullae',
-            locationName: '더클라임 문래',
-          ),
-        );
-
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
-
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_sadang',
-            locationName: '더클라임 사당',
-          ),
-        );
-
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
-
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_seouldae',
-            locationName: '더클라임 서울대',
-          ),
-        );
-
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
-
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_sillim',
-            locationName: '더클라임 신림',
-          ),
-        );
-
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
-
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_sinsa',
-            locationName: '더클라임 신사',
-          ),
-        );
-
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
-
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_yangjae',
-            locationName: '더클라임 양재',
-          ),
-        );
-
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
-
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_yeonnam',
-            locationName: '더클라임 연남',
-          ),
-        );
-
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
-
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_leesoo',
-            locationName: '더클라임 이수',
-          ),
-        );
-
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
-
-        locId = await into(locations).insert(
-          LocationsCompanion.insert(
-            locationUid: 'theclimb_ilsan',
-            locationName: '더클라임 일산',
-          ),
-        );
-
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '파랑',
-            colorValue: int.parse('0xFF0000FF'),
-            uid: '1',
-            score: 500,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '회색',
-            colorValue: int.parse('0xFFC0C0C0'),
-            uid: '1',
-            score: 1200,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '하양',
-            colorValue: int.parse('0xFFFFFFFF'),
-            uid: '1',
-            score: 10,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '주황',
-            colorValue: int.parse('0xFFFFA500'),
-            uid: '1',
-            score: 100,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '노랑',
-            colorValue: int.parse('0xFFFFFF00'),
-            uid: '1',
-            score: 30,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '초록',
-            colorValue: int.parse('0xFF008000'),
-            uid: '1',
-            score: 250,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '검정',
-            colorValue: int.parse('0xFF000000'),
-            uid: '1',
-            score: 1600,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '갈색',
-            colorValue: int.parse('0xFF8B4513'),
-            uid: '1',
-            score: 1400,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '빨강',
-            colorValue: int.parse('0xFFFF0000'),
-            uid: '1',
-            score: 800,
-            location: locId,
-          ),
-        );
-        await into(difficulties).insert(
-          DifficultiesCompanion.insert(
-            name: '보라',
-            colorValue: int.parse('0xFF800080'),
-            uid: '1',
-            score: 1000,
-            location: locId,
-          ),
-        );
+        await addLocations();
       },
       onUpgrade: stepByStep(
         from1To2: (m, schema) async {
@@ -1231,33 +56,1069 @@ class AppDatabase extends _$AppDatabase {
         },
       ),
       beforeOpen: (details) async {
-        var needChangeLocations = await (select(locations)
-              ..where((t) => t.locationUid.like('theClimb_%')))
-            .get();
-
-        await Future.wait(
-          needChangeLocations.map(
-            (location) async {
-              var newLocationUid =
-                  'theclimb_${location.locationUid.split('_')[1]}';
-              await (update(locations)
-                    ..where(
-                      (t) => t.id.equals(location.id),
-                    ))
-                  .write(
-                LocationsCompanion(
-                  locationUid: Value(newLocationUid),
-                ),
-              );
-            },
-          ),
-        );
-
         if (kDebugMode) {
           print('이전 버전: ${details.versionBefore}');
           print('이전 버전: ${details.versionNow}');
         }
       },
+    );
+  }
+
+  addLocations() async {
+    int locId;
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_gangnam',
+        locationName: '더클라임 강남',
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
+    );
+
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_nonhyeon',
+        locationName: '더클라임 논현',
+      ),
+    );
+
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
+    );
+
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_magok',
+        locationName: '더클라임 마곡',
+      ),
+    );
+
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
+    );
+
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_mullae',
+        locationName: '더클라임 문래',
+      ),
+    );
+
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
+    );
+
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_sadang',
+        locationName: '더클라임 사당',
+      ),
+    );
+
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
+    );
+
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_seouldae',
+        locationName: '더클라임 서울대',
+      ),
+    );
+
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
+    );
+
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_sillim',
+        locationName: '더클라임 신림',
+      ),
+    );
+
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
+    );
+
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_sinsa',
+        locationName: '더클라임 신사',
+      ),
+    );
+
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
+    );
+
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_yangjae',
+        locationName: '더클라임 양재',
+      ),
+    );
+
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
+    );
+
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_yeonnam',
+        locationName: '더클라임 연남',
+      ),
+    );
+
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
+    );
+
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_leesoo',
+        locationName: '더클라임 이수',
+      ),
+    );
+
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
+    );
+
+    locId = await into(locations).insert(
+      LocationsCompanion.insert(
+        locationUid: 'theclimb_ilsan',
+        locationName: '더클라임 일산',
+      ),
+    );
+
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '파랑',
+        colorValue: int.parse('0xFF0000FF'),
+        score: 500,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '회색',
+        colorValue: int.parse('0xFFC0C0C0'),
+        score: 1200,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '하양',
+        colorValue: int.parse('0xFFFFFFFF'),
+        score: 10,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '주황',
+        colorValue: int.parse('0xFFFFA500'),
+        score: 100,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '노랑',
+        colorValue: int.parse('0xFFFFFF00'),
+        score: 30,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '초록',
+        colorValue: int.parse('0xFF008000'),
+        score: 250,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '검정',
+        colorValue: int.parse('0xFF000000'),
+        score: 1600,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '갈색',
+        colorValue: int.parse('0xFF8B4513'),
+        score: 1400,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '빨강',
+        colorValue: int.parse('0xFFFF0000'),
+        score: 800,
+        location: locId,
+      ),
+    );
+    await into(difficulties).insert(
+      DifficultiesCompanion.insert(
+        name: '보라',
+        colorValue: int.parse('0xFF800080'),
+        score: 1000,
+        location: locId,
+      ),
     );
   }
 }

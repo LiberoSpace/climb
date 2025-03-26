@@ -1,7 +1,6 @@
 import 'package:climb/database/database.dart';
 import 'package:climb/database_services/exercise_record_service.dart';
 import 'package:drift/drift.dart';
-import 'package:flutter/foundation.dart';
 
 class DifficultyService {
   final AppDatabase db;
@@ -84,7 +83,6 @@ class DifficultyService {
   }
 
   Future<int> createDifficulty({
-    required String uid,
     required String name,
     required int colorValue,
     required int score,
@@ -93,7 +91,6 @@ class DifficultyService {
     try {
       var recordId = await db.into(db.difficulties).insert(
             DifficultiesCompanion.insert(
-              uid: uid,
               name: name,
               colorValue: colorValue,
               score: score,

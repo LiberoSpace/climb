@@ -3,7 +3,6 @@ import 'package:drift/drift.dart';
 
 class Difficulties extends Table {
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get uid => text()();
   TextColumn get name => text()();
   IntColumn get colorValue => integer()();
   IntColumn get score => integer()();

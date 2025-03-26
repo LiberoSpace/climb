@@ -44,3 +44,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# after update Gradle And AGP
+android/app/.cxx/Debug
+android/build
