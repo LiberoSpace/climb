@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:camera/camera.dart';
-import 'package:climb/constants/routes.dart';
+import 'package:climb/routes.dart';
 import 'package:climb/database/database.dart';
 import 'package:climb/database_services/climbing_problem_service.dart';
 import 'package:climb/database_services/difficulty_service.dart';

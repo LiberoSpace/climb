@@ -1,16 +1,69 @@
 # climb
 
-A new Flutter project.
+클라이밍 영상 촬영 및 분류 앱
 
-## Getting Started
+## 소개
 
-This project is a starting point for a Flutter application.
+### 핵심 가치
 
-A few resources to get you started if this is your first Flutter project:
+클라이밍 영상 촬영 후 영상을 삭제하는 데 드는 시간을 감축하고, 클라이밍 데이터를 분석 표기
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 핵심 기능
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 영상 촬영 및 저장
+  - 장소 및 난이도 설정
+  - 성공 실패 별도로 영상 저장
+- 영상 분류
+  - 영상 정보를 바탕으로 영상 분류 및 선택 가능
+  - 선택된 영상들만 삭제
+  - 선택된 영상들만 앨범으로 내보내기
+- 오프라인 기반으로 배터리 최적화
+  - 온라인 상태 연결 시 firebase crashlytics, firebase analytics에 정보 제공
+
+<br></br>
+
+## 세팅
+
+1. git clone
+2. 종속성 설치
+
+```bash
+$ flutter pub get
+```
+
+<br></br>
+
+## Run
+
+.vscode/launch.json 을 이용합니다.
+
+- vscode 왼쪽 탭 "실행 및 디버그"를 이용
+
+<br></br>
+
+## Guide
+
+### 폴더 및 소스 파일 설명
+
+주요 소스코드가 있는 lib 폴더에 대해서만 설명을 작성했습니다. **_읽기 전 다음 내용을 참고해주세요._**
+
+- 이 프로젝트는 2개월에 더불어 추가로 4개월간 여러 설정 페이지 기능과 프로필 페이지 등 네트워크가 필요한 기능을 추가하며 개발되다가, 앱이 제공할 핵심 가치에 대해 회고한 끝에 오프라인 기능에 집중하고자 관련 내용들을 제거하였습니다. 단, 소스코드는 미래의 필요성에 의해 남아있을 수 있습니다.
+- 위와 같은 사유로 기존에 네트워크에서 받아왔던 "클라이밍 장소(location)" 데이터를 local database migration 파일에 수동 추가하도록 작성되어 있습니다.
+- 네트워크가 연결된 기능을 제거하면서 flavor를 통해 분리되어 있었던 firebase 프로젝트를 한 개만 운영해도 괜찮게 되었고, 그에 따라 여러 실행 방법 등에 이전의 flavor 관련 레거시가 남아있습니다.
+
+```bash
+climb
+└── lib
+    ├── constants/
+    ├── database/ # drift 데이터베이스 설정 및 테이블 정의
+    ├── database_services/ # drift 데이터베이스 호출 로직
+    ├── models/ # 이전에 존재했던 공지사항 도메인 모델
+    ├── pages/ # UI
+    ├── providers/ # 재생성 되지 않고 상태를 제공할 클래스들
+    ├── styles/ # 컬러, 폰트, 커스텀 위젯 스타일
+    ├── utils/ # 전반적으로 사용 가능한 종속성 없는 유틸리티 함수
+    ├── widgets/ # 재사용되는 위젯들
+    ├── firebase_options.dart # 파이어베이스 기본값 설정
+    ├── main.dart
+    └── routes.dart # go-router 설정
+```
