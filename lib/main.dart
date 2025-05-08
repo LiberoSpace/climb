@@ -39,9 +39,7 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   if (env.contains('-prod')) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp();
   } else {
     await Firebase.initializeApp();
   }
@@ -55,26 +53,37 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  if (kDebugMode || kProfileMode) {
-    print('debug or profile mode');
-    // debug 모드 설정
-    await FirebaseAppCheck.instance.activate(
-      androidProvider: AndroidProvider.debug,
-      appleProvider: AppleProvider.debug,
-    );
-  } else {
-    await FirebaseAppCheck.instance.activate();
+  // if (kDebugMode || kProfileMode) {
+  //   print('debug or profile mode');
+  //   // debug 모드 설정
+  //   await FirebaseAppCheck.instance.activate(
+  //     androidProvider: AndroidProvider.debug,
+  //     appleProvider: AppleProvider.debug,
+  //   );
+  // } else {
+  //   await FirebaseAppCheck.instance.activate();
 
-    FlutterError.onError = (errorDetails) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    };
+  //   FlutterError.onError = (errorDetails) {
+  //     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  //   };
 
-    // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
-  }
+  //   // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  //   PlatformDispatcher.instance.onError = (error, stack) {
+  //     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+  //     return true;
+  //   };
+  // }
+  await FirebaseAppCheck.instance.activate();
+
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   final database = AppDatabase();
   final prefs = await SharedPreferences.getInstance();
